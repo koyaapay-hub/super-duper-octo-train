@@ -1,0 +1,392 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KoyaPay — Paie. Simple. Sécurisée. | Bénin</title>
+<meta name="description" content="Un seul dépôt et tous vos employés sont payés le même jour sur Mobile Money. Bulletins de paie envoyés automatiquement sur WhatsApp. MTN, Moov, Celtiis.">
+<meta name="theme-color" content="#0F1B2D">
+<meta property="og:title" content="KoyaPay — Paie. Simple. Sécurisée.">
+<meta property="og:description" content="Un seul dépôt et tous vos employés sont payés le même jour. Bulletin envoyé automatiquement sur WhatsApp.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  :root{--navy:#0F1B2D;--navy-2:#16273D;--paper:#FBF9F5;--paper-2:#F1EDE4;--ink:#14213D;--ink-soft:#5B6472;--green:#2FAF64;--green-deep:#1F8A4C;--green-bg:#E4F5EA;--line:rgba(20,33,61,0.1);}
+  *{box-sizing:border-box;}
+  html{scroll-behavior:smooth;}
+  body{margin:0;font-family:'Plus Jakarta Sans',sans-serif;color:var(--ink);background:var(--paper);line-height:1.5;}
+  img{max-width:100%;display:block;}
+  .wrap{max-width:1120px;margin:0 auto;padding:0 24px;}
+  h1,h2,h3{font-family:'Sora',sans-serif;margin:0;}
+  a{text-decoration:none;color:inherit;}
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;border:none;border-radius:11px;padding:13px 22px;font-family:'Plus Jakarta Sans',sans-serif;font-size:14px;font-weight:700;cursor:pointer;transition:background .15s,border-color .15s,color .15s,transform .1s;}
+  .btn:active{transform:scale(0.98);}
+  .btn-primary{background:var(--green);color:#fff;}
+  .btn-primary:hover{background:var(--green-deep);}
+  .btn-outline{background:transparent;color:var(--paper);border:1.5px solid rgba(251,249,245,0.35);}
+  .btn-outline:hover{border-color:var(--green);color:var(--green);}
+  section{padding:70px 0;}
+  .eyebrow{font-size:11.5px;text-transform:uppercase;letter-spacing:0.1em;color:var(--green-deep);font-weight:700;margin-bottom:10px;}
+  .section-title{font-size:28px;font-weight:700;line-height:1.25;max-width:560px;}
+  .section-sub{font-size:14.5px;color:var(--ink-soft);max-width:520px;margin-top:12px;line-height:1.6;}
+  .logo-img{width:36px;height:36px;object-fit:contain;border-radius:8px;flex-shrink:0;background:#fff;}
+  .logo-img.sm{width:26px;height:26px;border-radius:6px;}
+  .logo-img.lg{width:32px;height:32px;}
+  header{position:sticky;top:0;z-index:30;background:rgba(15,27,45,0.94);backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px);}
+  .nav-row{display:flex;align-items:center;justify-content:space-between;padding:14px 0;gap:16px;}
+  .nav-brand{display:flex;align-items:center;gap:10px;}
+  .nav-brand span{font-family:'Sora',sans-serif;font-weight:700;font-size:17px;color:#fff;}
+  .nav-links{display:flex;gap:22px;margin-left:40px;flex:1;}
+  .nav-links a{color:rgba(251,249,245,0.75);font-size:12.5px;font-weight:600;}
+  .nav-links a:hover{color:#fff;}
+  .nav-actions{display:flex;gap:10px;align-items:center;}
+  .nav-actions .btn{padding:10px 18px;font-size:13px;}
+  .nav-login{color:rgba(251,249,245,0.85);font-size:12.5px;font-weight:700;}
+  .nav-login:hover{color:var(--green);}
+  .burger{display:none;background:none;border:none;color:#fff;font-size:20px;cursor:pointer;padding:6px;}
+  .mobile-nav{display:none;background:var(--navy-2);padding:12px 24px 20px;flex-direction:column;gap:4px;}
+  .mobile-nav.open{display:flex;}
+  .mobile-nav a{color:rgba(251,249,245,0.85);font-size:14px;font-weight:600;padding:12px 0;border-bottom:1px solid rgba(255,255,255,0.06);}
+  .mobile-nav a:last-child{border-bottom:none;}
+  .mobile-nav .btn{margin-top:10px;width:100%;}
+  .hero{background:linear-gradient(165deg,var(--navy) 0%,var(--navy-2) 55%,#1a3a2e 130%);color:#fff;padding:76px 0 60px;overflow:hidden;}
+  .hero-grid{display:grid;grid-template-columns:1.05fr 0.95fr;gap:40px;align-items:center;}
+  .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(47,175,100,0.16);color:var(--green);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:700;margin-bottom:18px;}
+  .hero h1{font-size:40px;line-height:1.18;margin-bottom:16px;}
+  .hero h1 span{color:var(--green);}
+  .hero p.lead{font-size:15.5px;color:rgba(251,249,245,0.75);line-height:1.7;max-width:480px;margin-bottom:26px;}
+  .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:30px;}
+  .hero-trust{display:flex;gap:22px;font-size:12px;color:rgba(251,249,245,0.55);flex-wrap:wrap;}
+  .hero-trust span{display:flex;align-items:center;gap:6px;}
+  .hero-trust i{color:var(--green);}
+  .phone-mock{background:var(--paper);border-radius:26px;padding:0;box-shadow:0 40px 90px rgba(0,0,0,0.4);overflow:hidden;margin:0 auto;max-width:300px;border:6px solid #0a1420;}
+  .phone-mock .pm-top{background:linear-gradient(160deg,var(--navy),var(--navy-2));color:#fff;padding:18px 18px 44px;position:relative;}
+  .phone-mock .pm-top .pm-logo{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
+  .phone-mock .pm-top .pm-logo span{font-family:'Sora',sans-serif;font-weight:700;font-size:13px;}
+  .phone-mock .pm-top .pm-label{font-size:10.5px;color:rgba(251,249,245,0.55);}
+  .phone-mock .pm-top .pm-amount{font-family:'Sora',sans-serif;font-size:26px;font-weight:700;margin-top:2px;}
+  .pm-card{background:#fff;margin:-28px 14px 14px;border-radius:14px;padding:12px 14px;box-shadow:0 10px 24px rgba(0,0,0,0.12);display:flex;align-items:center;gap:10px;position:relative;}
+  .pm-card i{width:30px;height:30px;border-radius:9px;background:var(--green-bg);color:var(--green-deep);display:flex;align-items:center;justify-content:center;font-size:12px;}
+  .pm-card .n{font-size:11.5px;font-weight:700;color:var(--ink);}
+  .pm-card .s{font-size:10px;color:var(--ink-soft);}
+  .pm-list{padding:0 14px 18px;}
+  .pm-row{display:flex;align-items:center;gap:10px;padding:9px 0;border-bottom:1px solid var(--line);}
+  .pm-row:last-child{border-bottom:none;}
+  .pm-row .av{width:28px;height:28px;border-radius:8px;background:var(--paper-2);display:flex;align-items:center;justify-content:center;font-family:'Sora',sans-serif;font-weight:700;font-size:10.5px;color:var(--navy);}
+  .pm-row .info{flex:1;}
+  .pm-row .info .n{font-size:11.5px;font-weight:700;color:var(--ink);}
+  .pm-row .info .s{font-size:9.5px;color:var(--ink-soft);}
+  .pm-badge{font-size:9px;font-weight:700;background:var(--green-bg);color:var(--green-deep);padding:3px 8px;border-radius:10px;}
+  .strip{background:var(--navy-2);padding:18px 0;}
+  .strip-row{display:flex;justify-content:center;gap:36px;flex-wrap:wrap;color:rgba(251,249,245,0.5);font-size:12px;font-weight:600;}
+  .strip-row span{display:flex;align-items:center;gap:7px;}
+  .strip-row i{color:var(--green);}
+  .steps{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:40px;}
+  .step-card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px 18px;text-align:center;}
+  .step-num{font-family:'Sora',sans-serif;font-size:12px;font-weight:800;color:var(--green-deep);background:var(--green-bg);width:26px;height:26px;border-radius:8px;display:flex;align-items:center;justify-content:center;margin:0 auto 14px;}
+  .step-card i.big{font-size:20px;color:var(--navy);margin:0 auto 10px;display:block;width:fit-content;}
+  .step-card h3{font-size:14.5px;margin-bottom:6px;}
+  .step-card p{font-size:12.5px;color:var(--ink-soft);line-height:1.6;margin:0;}
+  .features-band{background:var(--navy);color:#fff;}
+  .features-band .eyebrow{color:var(--green);}
+  .features-band .section-sub{color:rgba(251,249,245,0.65);}
+  .feat-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px;}
+  .feat-card{background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:20px;text-align:center;}
+  .feat-card i{font-size:18px;color:var(--green);margin:0 auto 12px;display:block;width:fit-content;}
+  .feat-card h3{font-size:14px;margin-bottom:6px;}
+  .feat-card p{font-size:12.5px;color:rgba(251,249,245,0.6);line-height:1.6;margin:0;}
+  .employee-section .wrap{display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center;}
+  .wa-mock{background:#E9E0CF;border-radius:20px;padding:16px;box-shadow:0 20px 50px rgba(0,0,0,0.12);max-width:320px;margin:0 auto;}
+  .wa-mock .wh{background:#128C3E;color:#fff;border-radius:12px 12px 0 0;padding:12px 14px;display:flex;align-items:center;gap:10px;margin:-16px -16px 0;}
+  .wa-mock .wh .n{font-size:13px;font-weight:700;}
+  .wa-mock .wh .s{font-size:10.5px;color:rgba(255,255,255,0.75);}
+  .wa-body2{padding:16px 4px 4px;}
+  .wa-bubble{background:#DCF3D1;border-radius:10px 10px 10px 2px;padding:10px 12px;font-size:12.5px;line-height:1.5;margin-bottom:10px;max-width:88%;color:var(--ink);}
+  .wa-doc{background:#fff;border-radius:10px;padding:10px;display:flex;gap:10px;align-items:center;max-width:88%;margin-bottom:10px;}
+  .wa-doc i{font-size:20px;color:#D8412F;}
+  .wa-doc .n{font-size:11.5px;font-weight:700;color:var(--ink);}
+  .wa-doc .s{font-size:10px;color:var(--ink-soft);}
+  .emp-points{margin-top:20px;display:flex;flex-direction:column;gap:14px;}
+  .emp-point{display:flex;gap:12px;align-items:flex-start;}
+  .emp-point i{width:32px;height:32px;border-radius:9px;background:var(--green-bg);color:var(--green-deep);display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;}
+  .emp-point b{display:block;font-size:13.5px;}
+  .emp-point span{font-size:12.5px;color:var(--ink-soft);line-height:1.5;}
+  .pricing-table{background:#fff;border:1px solid var(--line);border-radius:18px;overflow:hidden;margin-top:36px;}
+  table{width:100%;border-collapse:collapse;font-size:13.5px;}
+  thead th{text-align:left;background:var(--paper-2);font-size:11px;text-transform:uppercase;letter-spacing:0.05em;color:var(--ink-soft);padding:14px 20px;}
+  tbody td{padding:16px 20px;border-top:1px solid var(--line);}
+  tbody td:first-child{font-weight:700;}
+  tbody td:last-child{color:var(--green-deep);font-weight:700;text-align:right;}
+  .pricing-examples{display:flex;gap:12px;margin-top:16px;flex-wrap:wrap;}
+  .pex{flex:1;min-width:170px;background:var(--paper-2);border-radius:12px;padding:14px 16px;}
+  .pex .a{font-family:'Sora',sans-serif;font-weight:700;font-size:15px;}
+  .pex .b{font-size:11.5px;color:var(--ink-soft);margin-top:2px;}
+  .pex .f{font-size:12px;color:var(--green-deep);font-weight:700;margin-top:6px;}
+  .cta-band{background:linear-gradient(135deg,var(--navy) 0%,#163526 100%);color:#fff;text-align:center;padding:70px 0;}
+  .cta-band h2{font-size:26px;max-width:520px;margin:0 auto 14px;}
+  .cta-band p{font-size:14px;color:rgba(251,249,245,0.65);max-width:440px;margin:0 auto 26px;}
+  .cta-actions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;}
+  footer{background:var(--navy);color:rgba(251,249,245,0.55);padding:36px 0 26px;font-size:12px;}
+  .foot-brand{display:flex;align-items:center;justify-content:center;gap:8px;color:#fff;font-family:'Sora',sans-serif;font-weight:700;font-size:14px;}
+  .foot-row{display:flex;flex-direction:column;align-items:center;gap:12px;border-top:1px solid rgba(255,255,255,0.08);padding-top:20px;margin-top:20px;}
+  .foot-links{display:flex;justify-content:center;gap:20px;flex-wrap:wrap;}
+  .foot-links a:hover{color:var(--green);}
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(15,27,45,0.65);align-items:center;justify-content:center;z-index:50;padding:20px;backdrop-filter:blur(4px);}
+  .modal-overlay.open{display:flex;}
+  .modal-box{background:#fff;border-radius:18px;padding:28px 24px;width:100%;max-width:420px;box-shadow:0 30px 80px rgba(0,0,0,0.3);position:relative;}
+  .modal-box h3{font-size:18px;margin-bottom:6px;}
+  .modal-box .modal-sub{font-size:13px;color:var(--ink-soft);margin-bottom:18px;line-height:1.5;}
+  .modal-close{position:absolute;top:14px;right:14px;width:32px;height:32px;border:none;background:var(--paper-2);border-radius:8px;cursor:pointer;color:var(--ink-soft);font-size:14px;}
+  .form-group{margin-bottom:14px;}
+  .form-group label{display:block;font-size:12px;font-weight:600;margin-bottom:5px;}
+  .form-group input,.form-group select{width:100%;border:1px solid var(--line);background:#fff;border-radius:10px;padding:11px 12px;font-size:14px;font-family:'Plus Jakarta Sans',sans-serif;color:var(--ink);outline:none;}
+  .form-group input:focus,.form-group select:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(47,175,100,0.15);}
+  .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+  .form-success{display:none;text-align:center;padding:20px 10px;}
+  .form-success.show{display:block;}
+  .form-success i{font-size:42px;color:var(--green);margin-bottom:12px;}
+  .form-success h4{font-family:'Sora',sans-serif;font-size:17px;margin-bottom:6px;}
+  .form-success p{font-size:13.5px;color:var(--ink-soft);line-height:1.5;}
+  .contact-info{margin-top:16px;padding-top:16px;border-top:1px solid var(--line);font-size:12.5px;color:var(--ink-soft);}
+  .contact-info p{margin:6px 0;display:flex;align-items:center;gap:8px;}
+  .contact-info i{color:var(--green);width:16px;}
+  .contact-info a{color:var(--ink);font-weight:600;}
+  .contact-info a:hover{color:var(--green);}
+  .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease;}
+  .reveal.in{opacity:1;transform:translateY(0);}
+  @media (max-width:900px){.hero-grid{grid-template-columns:1fr;}.hero-grid>div:first-child{text-align:center;}.hero h1{font-size:32px;}.hero p.lead{margin-left:auto;margin-right:auto;}.hero-actions,.hero-trust{justify-content:center;}.employee-section .wrap{grid-template-columns:1fr;}.steps{grid-template-columns:1fr 1fr;}}
+  @media (max-width:820px){.nav-links{display:none;}.burger{display:block;}.nav-actions .btn-outline{display:none;}}
+  @media (max-width:640px){section{padding:52px 0;}.wrap{padding:0 20px;}.section-title{font-size:23px;}.steps,.feat-grid{gap:14px;}.step-card,.feat-card{padding:18px 16px;}.nav-row{padding:10px 0;}.nav-brand span{font-size:15px;}.nav-actions .btn{padding:8px 14px;font-size:12px;}.form-row{grid-template-columns:1fr;}}
+  @media (max-width:560px){.steps{grid-template-columns:1fr;}.feat-grid{grid-template-columns:1fr;}}
+  @media (max-width:480px){.wrap{padding:0 16px;}.hero{padding:56px 0 48px;}.hero h1{font-size:28px;}}
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap nav-row">
+    <a href="#" class="nav-brand"><img src="koyapay-logo.png" alt="KoyaPay" class="logo-img"><span>KoyaPay</span></a>
+    <nav class="nav-links">
+      <a href="#comment">Comment ça marche</a>
+      <a href="#fonctionnalites">Fonctionnalités</a>
+      <a href="#employes">Côté employé</a>
+      <a href="#tarifs">Tarifs</a>
+    </nav>
+    <div class="nav-actions">
+      <a href="app.html" class="nav-login">Se connecter</a>
+      <a href="#tarifs" class="btn btn-outline">Voir les tarifs</a>
+      <a href="app.html" class="btn btn-primary">Créer un compte</a>
+    </div>
+    <button class="burger" id="burgerBtn" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
+  </div>
+  <div class="mobile-nav" id="mobileNav">
+    <a href="#comment" onclick="closeMobile()">Comment ça marche</a>
+    <a href="#fonctionnalites" onclick="closeMobile()">Fonctionnalités</a>
+    <a href="#employes" onclick="closeMobile()">Côté employé</a>
+    <a href="#tarifs" onclick="closeMobile()">Tarifs</a>
+    <a href="app.html" class="btn btn-primary">Créer un compte</a>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div>
+        <div class="hero-eyebrow"><i class="fa-solid fa-bolt"></i> Paie. Simple. Sécurisée.</div>
+        <h1>Un seul dépôt.<br>Tous vos employés <span>payés le même jour</span>.</h1>
+        <p class="lead">KoyaPay simplifie radicalement le paiement des salaires : déposez une seule fois la masse salariale, et chaque employé reçoit son argent sur Mobile Money — avec son bulletin de paie envoyé automatiquement sur WhatsApp.</p>
+        <div class="hero-actions">
+          <a href="app.html" class="btn btn-primary">Créer mon compte gratuitement</a>
+          <a href="#comment" class="btn btn-outline"><i class="fa-solid fa-play"></i> Voir comment ça marche</a>
+        </div>
+        <div class="hero-trust">
+          <span><i class="fa-solid fa-check"></i> Aucune app côté employé</span>
+          <span><i class="fa-solid fa-check"></i> MTN, Moov &amp; Celtiis</span>
+          <span><i class="fa-solid fa-check"></i> Bulletins signés auto</span>
+        </div>
+      </div>
+      <div>
+        <div class="phone-mock">
+          <div class="pm-top">
+            <div class="pm-logo"><img src="koyapay-logo.png" alt="" class="logo-img sm"><span>KoyaPay</span></div>
+            <div class="pm-label">Masse salariale de septembre</div>
+            <div class="pm-amount">366 500 FCFA</div>
+          </div>
+          <div class="pm-card"><i class="fa-solid fa-circle-check"></i><div><div class="n">Dépôt confirmé</div><div class="s">via MTN MoMo</div></div></div>
+          <div class="pm-list">
+            <div class="pm-row"><div class="av">AK</div><div class="info"><div class="n">Awa Kouassi</div><div class="s">125 000 FCFA</div></div><span class="pm-badge">Payé</span></div>
+            <div class="pm-row"><div class="av">FD</div><div class="info"><div class="n">Fabrice Dossou</div><div class="s">98 000 FCFA</div></div><span class="pm-badge">Payé</span></div>
+            <div class="pm-row"><div class="av">NA</div><div class="info"><div class="n">Nadège Adjovi</div><div class="s">143 500 FCFA</div></div><span class="pm-badge">Payé</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="strip">
+  <div class="wrap strip-row">
+    <span><i class="fa-solid fa-mobile-screen-button"></i> MTN Mobile Money</span>
+    <span><i class="fa-solid fa-mobile-screen-button"></i> Moov Money</span>
+    <span><i class="fa-solid fa-mobile-screen-button"></i> Celtiis Cash</span>
+    <span><i class="fa-brands fa-whatsapp"></i> WhatsApp Business</span>
+    <span><i class="fa-solid fa-building-columns"></i> Virement bancaire</span>
+  </div>
+</div>
+
+<section id="comment">
+  <div class="wrap">
+    <p class="eyebrow">Comment ça marche</p>
+    <h2 class="section-title">De la préparation au bulletin, en quatre étapes</h2>
+    <p class="section-sub">Conçu pour que la paie ne prenne plus toute une journée à l'employeur ou au comptable.</p>
+    <div class="steps">
+      <div class="step-card reveal"><div class="step-num">1</div><i class="fa-solid fa-users big"></i><h3>Préparez la paie</h3><p>Ajoutez vos employés (manuellement ou via Excel) et ajustez primes, transport ou retenues du mois.</p></div>
+      <div class="step-card reveal"><div class="step-num">2</div><i class="fa-solid fa-calendar-day big"></i><h3>Choisissez la date</h3><p>Fixez la date de paiement. Vous pouvez encore tout modifier jusqu'à la veille.</p></div>
+      <div class="step-card reveal"><div class="step-num">3</div><i class="fa-solid fa-wallet big"></i><h3>Déposez une seule fois</h3><p>Un seul dépôt couvre l'ensemble des salaires et des frais, via Mobile Money ou virement.</p></div>
+      <div class="step-card reveal"><div class="step-num">4</div><i class="fa-solid fa-paper-plane big"></i><h3>Tout le monde est payé</h3><p>Chaque employé reçoit son salaire et son bulletin sur WhatsApp, le jour J, simultanément.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="features-band" id="fonctionnalites">
+  <div class="wrap">
+    <p class="eyebrow">Pour l'employeur</p>
+    <h2 class="section-title">Tout ce qu'il faut pour gérer la paie, au même endroit</h2>
+    <p class="section-sub">Employés, paiements, suivi et documents — sans jongler entre plusieurs outils.</p>
+    <div class="feat-grid">
+      <div class="feat-card reveal"><i class="fa-solid fa-user-plus"></i><h3>Gestion des employés</h3><p>Ajout manuel ou import Excel, avec contrôle des erreurs ligne par ligne.</p></div>
+      <div class="feat-card reveal"><i class="fa-solid fa-chart-line"></i><h3>Suivi en temps réel</h3><p>Statuts payé / en attente / échec, avec relance en un clic.</p></div>
+      <div class="feat-card reveal"><i class="fa-solid fa-file-invoice"></i><h3>Bulletins automatiques</h3><p>Générés et signés avec votre cachet, envoyés sans action manuelle.</p></div>
+      <div class="feat-card reveal"><i class="fa-solid fa-clock-rotate-left"></i><h3>Historique &amp; exports</h3><p>Retrouvez chaque paie passée et exportez vos journaux de paiement.</p></div>
+      <div class="feat-card reveal"><i class="fa-solid fa-shield-halved"></i><h3>Sécurité</h3><p>OTP, verrouillage et suivi CNSS par employé pour rester conforme.</p></div>
+      <div class="feat-card reveal"><i class="fa-solid fa-coins"></i><h3>Solde intelligent</h3><p>Tout surplus est reporté automatiquement sur votre prochain dépôt.</p></div>
+    </div>
+  </div>
+</section>
+
+<section class="employee-section" id="employes">
+  <div class="wrap">
+    <div class="reveal">
+      <div class="wa-mock">
+        <div class="wh"><img src="koyapay-logo.png" alt="" class="logo-img lg" style="background:#fff;border-radius:50%;padding:2px;"><div><div class="n">KoyaPay</div><div class="s">Compte professionnel</div></div></div>
+        <div class="wa-body2">
+          <div class="wa-bubble">Bonjour Awa 👋 Votre salaire de <strong>125 000 FCFA</strong> vient d'être déposé sur votre Mobile Money.</div>
+          <div class="wa-doc"><i class="fa-solid fa-file-pdf"></i><div><div class="n">Bulletin_Aout_2026.pdf</div><div class="s">142 Ko</div></div></div>
+        </div>
+      </div>
+    </div>
+    <div class="reveal">
+      <p class="eyebrow">Pour l'employé</p>
+      <h2 class="section-title">Rien à installer, rien à apprendre</h2>
+      <p class="section-sub">L'employé reçoit simplement son argent et son bulletin, là où il est déjà : Mobile Money et WhatsApp.</p>
+      <div class="emp-points">
+        <div class="emp-point"><i class="fa-solid fa-money-bill-transfer"></i><div><b>Salaire direct sur Mobile Money</b><span>MTN, Moov ou Celtiis — sans délai ni étape supplémentaire.</span></div></div>
+        <div class="emp-point"><i class="fa-brands fa-whatsapp"></i><div><b>Bulletin envoyé sur WhatsApp</b><span>Document signé et cacheté, prêt à conserver ou imprimer.</span></div></div>
+        <div class="emp-point"><i class="fa-solid fa-ban"></i><div><b>Aucune application</b><span>Aucun compte à créer, aucun mot de passe à retenir.</span></div></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="tarifs">
+  <div class="wrap">
+    <p class="eyebrow">Tarifs</p>
+    <h2 class="section-title">Un seul frais, tout compris</h2>
+    <p class="section-sub">Frais KoyaPay et frais opérateurs inclus dans un pourcentage unique, dégressif selon votre masse salariale.</p>
+    <div class="pricing-table reveal">
+      <table>
+        <thead><tr><th>Masse salariale nette</th><th style="text-align:right;">Frais KoyaPay</th></tr></thead>
+        <tbody>
+          <tr><td>0 – 500 000 FCFA</td><td>0,7 %</td></tr>
+          <tr><td>500 001 – 1 000 000 FCFA</td><td>0,5 % + 50 FCFA / employé</td></tr>
+          <tr><td>1 000 001 FCFA et plus</td><td>0,4 % + 50 FCFA / employé</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="pricing-examples">
+      <div class="pex reveal"><div class="a">200 000 FCFA</div><div class="b">5 employés</div><div class="f">1 400 FCFA de frais</div></div>
+      <div class="pex reveal"><div class="a">800 000 FCFA</div><div class="b">12 employés</div><div class="f">4 600 FCFA de frais</div></div>
+      <div class="pex reveal"><div class="a">3 500 000 FCFA</div><div class="b">25 employés</div><div class="f">15 250 FCFA de frais</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="cta-band" id="cta">
+  <div class="wrap">
+    <h2>Prêt à simplifier votre paie ?</h2>
+    <p>Créez votre compte, ajoutez vos employés, et faites votre premier dépôt en quelques minutes.</p>
+    <div class="cta-actions">
+      <a href="app.html" class="btn btn-primary">Créer mon compte</a>
+      <a href="#" class="btn btn-outline" onclick="openModal(event)">Parler à l'équipe</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div class="foot-brand"><img src="koyapay-logo.png" alt="" class="logo-img sm"> KoyaPay</div>
+    <p style="max-width:420px;margin:10px auto 0;text-align:center;">Paie. Simple. Sécurisée. Un seul dépôt et tous vos employés sont payés le même jour.</p>
+    <div class="foot-row">
+      <span>© 2026 KoyaPay — Bénin</span>
+      <div class="foot-links">
+        <a href="#comment">Comment ça marche</a>
+        <a href="#fonctionnalites">Fonctionnalités</a>
+        <a href="#tarifs">Tarifs</a>
+        <a href="#" onclick="openModal(event)">Contact</a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="contactModal" onclick="closeModal(event)">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <button class="modal-close" onclick="closeModal(event)" aria-label="Fermer"><i class="fa-solid fa-xmark"></i></button>
+    <div id="formView">
+      <h3>Parler à l'équipe KoyaPay</h3>
+      <p class="modal-sub">Laissez vos coordonnées. On vous recontacte sous 24 h pour une démo ou pour créer votre compte.</p>
+      <form id="demoForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+        <input type="hidden" name="_subject" value="Nouvelle demande KoyaPay">
+        <div class="form-row">
+          <div class="form-group"><label for="fName">Prénom *</label><input type="text" id="fName" name="prenom" required placeholder="Jean"></div>
+          <div class="form-group"><label for="fLast">Nom *</label><input type="text" id="fLast" name="nom" required placeholder="Koffi"></div>
+        </div>
+        <div class="form-group"><label for="fCompany">Entreprise *</label><input type="text" id="fCompany" name="entreprise" required placeholder="Nom de votre entreprise"></div>
+        <div class="form-group"><label for="fPhone">Téléphone / WhatsApp *</label><input type="tel" id="fPhone" name="telephone" required placeholder="+229 01 XX XX XX XX"></div>
+        <div class="form-group"><label for="fEmail">Email</label><input type="email" id="fEmail" name="email" placeholder="vous@entreprise.bj"></div>
+        <div class="form-group"><label for="fEmployees">Nombre d'employés (approx.)</label>
+          <select id="fEmployees" name="employes"><option value="1-5">1 – 5</option><option value="6-15">6 – 15</option><option value="16-50">16 – 50</option><option value="50+">Plus de 50</option></select>
+        </div>
+        <button type="submit" class="btn btn-primary" style="width:100%;margin-top:6px;" id="submitBtn">Envoyer ma demande</button>
+      </form>
+      <div class="contact-info">
+        <p><i class="fa-solid fa-phone"></i> <a href="tel:+2290162434707">+229 01 62 43 47 07</a></p>
+        <p><i class="fa-brands fa-whatsapp"></i> <a href="https://wa.me/2290162434707" target="_blank" rel="noopener">+229 01 62 43 47 07</a></p>
+        <p><i class="fa-solid fa-envelope"></i> <a href="mailto:koyaapay@gmail.com">koyaapay@gmail.com</a></p>
+      </div>
+    </div>
+    <div class="form-success" id="successView">
+      <i class="fa-solid fa-circle-check"></i>
+      <h4>Demande bien reçue !</h4>
+      <p>Merci. Notre équipe vous contacte très rapidement sur WhatsApp ou par téléphone.</p>
+      <button class="btn btn-primary" style="margin-top:18px;width:100%;" onclick="closeModal(event)">Fermer</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  const burger=document.getElementById('burgerBtn'),mobileNav=document.getElementById('mobileNav');
+  burger.addEventListener('click',()=>{mobileNav.classList.toggle('open');burger.querySelector('i').classList.toggle('fa-bars');burger.querySelector('i').classList.toggle('fa-xmark');});
+  function closeMobile(){mobileNav.classList.remove('open');burger.querySelector('i').classList.add('fa-bars');burger.querySelector('i').classList.remove('fa-xmark');}
+  function openModal(e){if(e)e.preventDefault();document.getElementById('contactModal').classList.add('open');document.getElementById('formView').style.display='block';document.getElementById('successView').classList.remove('show');document.body.style.overflow='hidden';}
+  function closeModal(e){if(e)e.preventDefault();document.getElementById('contactModal').classList.remove('open');document.body.style.overflow='';}
+  document.getElementById('demoForm').addEventListener('submit',function(e){
+    const action=this.getAttribute('action')||'';
+    if(action.includes('YOUR_FORM_ID')){e.preventDefault();const btn=document.getElementById('submitBtn');btn.disabled=true;btn.textContent='Envoi en cours…';setTimeout(()=>{document.getElementById('formView').style.display='none';document.getElementById('successView').classList.add('show');btn.disabled=false;btn.textContent='Envoyer ma demande';this.reset();},700);}
+  });
+  const io=new IntersectionObserver((entries)=>{entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('in');io.unobserve(entry.target);}});},{threshold:0.12});
+  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
+  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+</script>
+</body>
+</html>

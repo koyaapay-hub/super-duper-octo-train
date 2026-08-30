@@ -1,0 +1,1503 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>KoyaPay — Application</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+  :root{
+    --navy:#0F1B2D; --navy-2:#16273D; --paper:#FBF9F5; --paper-2:#F1EDE4;
+    --ink:#14213D; --ink-soft:#5B6472; --gold:#2FAF64; --gold-deep:#1F8A4C;
+    --teal:#1E7A64; --teal-bg:#E4F2EE; --line:rgba(20,33,61,0.12);
+    --danger:#B23B3B; --danger-bg:#FBEAEA; --amber:#B8860B; --amber-bg:#FBF1DC;
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0; font-family:'Plus Jakarta Sans', sans-serif;
+    background:
+      radial-gradient(circle at 12% 6%, rgba(47,175,100,0.14), transparent 40%),
+      radial-gradient(circle at 88% 94%, rgba(30,122,100,0.12), transparent 45%),
+      var(--navy);
+    min-height:100vh; display:flex; justify-content:center; padding:24px 12px 0;
+  }
+  @media (max-width:480px){
+    body{ padding:0; display:block; }
+    .app{ width:100%!important; min-height:100vh!important; border-radius:0!important; border:none!important; box-shadow:none!important; }
+    .footnote{ display:none; }
+  }
+
+  .app{
+    width:420px; max-width:100%; background:var(--paper); border-radius:28px;
+    border:1px solid rgba(255,255,255,0.08); box-shadow:0 30px 70px rgba(0,0,0,0.45);
+    overflow:hidden; position:relative; min-height:820px; display:flex; flex-direction:column;
+  }
+
+  /* Topbar (partagée) */
+  .topbar{ background:linear-gradient(160deg, var(--navy) 0%, var(--navy-2) 100%); color:var(--paper); padding:20px 20px 18px; position:relative; overflow:hidden; flex-shrink:0; }
+  .topbar::after{ content:""; position:absolute; right:-30px; top:-30px; width:140px; height:140px; border-radius:50%; background:radial-gradient(circle, rgba(47,175,100,0.32), transparent 70%); pointer-events:none; }
+  .topbar-row{ display:flex; justify-content:space-between; align-items:center; position:relative; }
+  .topbar-title{ display:flex; align-items:center; gap:10px; position:relative; }
+  .topbar-title i{ width:34px; height:34px; border-radius:10px; background:rgba(47,175,100,0.18); color:var(--gold); display:flex; align-items:center; justify-content:center; font-size:15px; }
+  .topbar-title h1{ font-family:'Sora', sans-serif; font-size:17px; font-weight:600; margin:0; }
+  .topbar-title p{ font-size:11.5px; color:rgba(251,249,245,0.6); margin:1px 0 0; }
+  .add-btn{ width:36px; height:36px; border-radius:11px; border:none; background:var(--gold); color:var(--navy); font-size:16px; cursor:pointer; display:flex; align-items:center; justify-content:center; }
+  .add-btn:active{ transform:scale(0.94); }
+
+  .step-label{ font-size:11.5px; color:var(--gold); font-weight:700; text-transform:uppercase; letter-spacing:0.07em; margin:0 0 5px; position:relative; }
+  .step-title{ font-family:'Sora', sans-serif; font-size:19px; font-weight:600; margin:0; position:relative; }
+  .step-sub{ font-size:12.5px; color:rgba(251,249,245,0.68); margin:5px 0 0; line-height:1.5; position:relative; }
+  .progress{ display:flex; gap:6px; margin-top:16px; position:relative; }
+  .progress i{ flex:1; height:3px; border-radius:2px; background:rgba(251,249,245,0.18); overflow:hidden; }
+  .progress i span{ display:block; height:100%; width:0%; background:var(--gold); transition:width .3s ease; }
+
+  .stat-strip{ display:flex; gap:8px; margin-top:16px; position:relative; }
+  .stat-pill{ flex:1; background:rgba(255,255,255,0.07); border-radius:12px; padding:10px 10px; display:flex; align-items:center; gap:8px; }
+  .stat-pill i{ color:var(--gold); font-size:13px; }
+  .stat-pill .val{ font-family:'Sora', sans-serif; font-size:13px; font-weight:600; line-height:1.1; }
+  .stat-pill .lbl{ font-size:9.5px; color:rgba(251,249,245,0.55); }
+
+  .tabs{ display:flex; gap:6px; margin-top:16px; position:relative; }
+  .tab-btn{ flex:1; background:rgba(255,255,255,0.07); border:none; color:rgba(251,249,245,0.65); font-size:12px; font-weight:700; padding:9px 4px; border-radius:9px; cursor:pointer; font-family:'Plus Jakarta Sans', sans-serif; }
+  .tab-btn.active{ background:var(--gold); color:var(--navy); }
+
+  .content{ flex:1; padding:16px 18px 90px; overflow-y:auto; }
+  .content.no-nav{ padding-bottom:20px; }
+
+  .screen{ display:none; animation:fade .3s ease; }
+  .screen.active{ display:block; }
+  @keyframes fade{ from{opacity:0; transform:translateY(6px);} to{opacity:1; transform:translateY(0);} }
+
+  label{ display:block; font-size:12px; font-weight:600; margin:0 0 5px; }
+  label.first{ margin-top:0; }
+  .field-row{ display:flex; gap:8px; }
+  select, input{
+    width:100%; border:1px solid var(--line); background:#fff; border-radius:10px; padding:11px 12px;
+    font-size:14px; font-family:'Plus Jakarta Sans', sans-serif; color:var(--ink); outline:none; transition:border-color .15s;
+  }
+  select{ max-width:108px; }
+  input:focus, select:focus{ border-color:var(--gold); box-shadow:0 0 0 3px rgba(47,175,100,0.15); }
+  input:disabled, input[readonly]{ background:var(--paper-2); color:var(--ink-soft); }
+  .hint{ font-size:11.5px; color:var(--ink-soft); margin-top:5px; }
+  .error{ font-size:11.5px; color:var(--danger); margin-top:5px; display:none; }
+  .checkbox-row{ display:flex; align-items:center; gap:8px; font-size:12.5px; font-weight:500; color:var(--ink-soft); margin-top:6px; cursor:pointer; }
+  .checkbox-row input{ width:auto; }
+
+  .btn{ width:100%; border:none; border-radius:11px; padding:13px 16px; font-family:'Plus Jakarta Sans', sans-serif; font-size:14px; font-weight:700; cursor:pointer; }
+  .btn:active{ transform:scale(0.98); }
+  .btn-primary{ background:var(--gold); color:var(--navy); margin-top:14px; }
+  .btn-primary:hover{ background:var(--gold-deep); }
+  .btn-ghost{ background:var(--paper-2); color:var(--ink-soft); margin-top:8px; border:1px solid var(--line); }
+  .btn-outline{ background:#fff; color:var(--ink); border:1px solid var(--line); }
+
+  .otp-row{ display:flex; gap:8px; margin-top:6px; }
+  .otp-row input{ text-align:center; font-size:19px; font-weight:600; padding:10px 0; width:100%; }
+  .resend{ display:flex; justify-content:space-between; align-items:center; margin-top:16px; font-size:12.5px; color:var(--ink-soft); }
+  .btn-link{ background:none; border:none; color:var(--teal); font-weight:700; font-size:13px; padding:0; cursor:pointer; }
+
+  /* Upload */
+  .upload{ position:relative; border:1.5px dashed var(--line); border-radius:12px; padding:16px 40px 16px 16px; text-align:center; font-size:12.5px; color:var(--ink-soft); background:var(--paper-2); cursor:pointer; margin-top:6px; }
+  .upload.filled{ border-style:solid; border-color:var(--teal); background:var(--teal-bg); color:var(--teal); font-weight:600; }
+  .upload input{ display:none; }
+  .upload-remove{ display:none; position:absolute; top:8px; right:8px; width:22px; height:22px; border-radius:50%; border:none; background:rgba(20,33,61,0.08); color:var(--ink-soft); font-size:13px; line-height:1; align-items:center; justify-content:center; cursor:pointer; }
+  .upload.filled .upload-remove{ display:flex; background:rgba(255,255,255,0.6); color:var(--teal); }
+  .upload-remove:hover{ background:rgba(20,33,61,0.16); }
+  .upload-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+
+  .summary-card{ background:var(--paper-2); border-radius:12px; padding:6px 16px; margin-top:8px; }
+  .summary-card.plain{ background:#fff; border:1px solid var(--line); }
+  .summary-row{ display:flex; justify-content:space-between; align-items:center; font-size:13px; padding:11px 0; border-bottom:1px solid var(--line); }
+  .summary-row:last-child{ border-bottom:none; }
+  .summary-row span:first-child{ color:var(--ink-soft); display:flex; align-items:center; gap:7px; }
+  .summary-row span:first-child i{ color:var(--gold); font-size:12px; width:14px; }
+  .summary-row span:last-child{ font-weight:700; color:var(--ink); }
+  .summary-row.grand span:last-child{ font-family:'Sora', sans-serif; font-size:16px; color:var(--teal); }
+
+  .done-wrap{ text-align:center; padding:26px 4px 6px; }
+  .done-icon{ width:64px; height:64px; border-radius:50%; background:var(--teal-bg); color:var(--teal); display:flex; align-items:center; justify-content:center; margin:0 auto 18px; font-size:28px; }
+  .done-title{ font-family:'Sora', sans-serif; font-size:19px; font-weight:600; color:var(--ink); margin:0 0 8px; }
+  .done-sub{ font-size:13.5px; color:var(--ink-soft); line-height:1.6; margin:0 0 4px; }
+
+  /* Search / list rows */
+  .search-row{ display:flex; align-items:center; gap:8px; background:#fff; border:1px solid var(--line); border-radius:11px; padding:9px 12px; margin-bottom:14px; }
+  .search-row i{ color:var(--ink-soft); font-size:13px; }
+  .search-row input{ border:none; outline:none; flex:1; font-size:13.5px; font-family:'Plus Jakarta Sans', sans-serif; background:transparent; padding:0; }
+
+  .emp-card{ background:#fff; border:1px solid var(--line); border-radius:14px; overflow:hidden; margin-bottom:10px; }
+  .emp-head{ display:flex; align-items:center; gap:11px; padding:12px 14px; }
+  .emp-avatar{ width:38px; height:38px; border-radius:10px; background:var(--teal-bg); color:var(--teal); display:flex; align-items:center; justify-content:center; font-family:'Sora', sans-serif; font-weight:600; font-size:13px; flex-shrink:0; }
+  .emp-info{ flex:1; min-width:0; }
+  .emp-name{ font-weight:700; font-size:13.5px; }
+  .emp-sub{ font-size:11.5px; color:var(--ink-soft); display:flex; align-items:center; gap:5px; margin-top:2px; }
+  .emp-net{ font-family:'Sora', sans-serif; font-size:13px; font-weight:600; margin-top:3px; }
+  .cnss-badge{ display:inline-flex; align-items:center; gap:3px; font-size:10px; font-weight:700; padding:2px 7px; border-radius:20px; background:var(--teal-bg); color:var(--teal); margin-top:3px; }
+  .emp-actions{ display:flex; flex-direction:column; gap:6px; }
+  .icon-btn{ width:28px; height:28px; border-radius:8px; border:1px solid var(--line); background:var(--paper-2); color:var(--ink-soft); cursor:pointer; font-size:11.5px; }
+  .icon-btn.danger:hover{ background:var(--danger-bg); color:var(--danger); }
+  .icon-btn:hover{ background:var(--paper-2); }
+
+  .empty-state{ text-align:center; padding:50px 20px; color:var(--ink-soft); }
+  .empty-state i{ font-size:34px; color:var(--line); margin-bottom:12px; display:block; }
+  .empty-state p{ font-size:13px; margin:0; }
+
+  /* Accordéon paie */
+  .emp-head.click{ cursor:pointer; }
+  .emp-net-col{ margin-left:auto; text-align:right; }
+  .emp-net-col .n{ font-family:'Sora', sans-serif; font-size:13.5px; font-weight:600; }
+  .emp-net-col .l{ font-size:9.5px; color:var(--ink-soft); }
+  .chev{ color:var(--ink-soft); font-size:11px; transition:transform .2s; }
+  .emp-card.open .chev{ transform:rotate(180deg); }
+  .emp-detail{ display:none; padding:0 14px 14px; border-top:1px solid var(--line); }
+  .emp-card.open .emp-detail{ display:block; }
+  .var-grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px; }
+  .var-field label{ font-size:10.5px; font-weight:700; color:var(--ink-soft); margin:0 0 4px; display:block; }
+  .var-field input{ width:100%; border:1px solid var(--line); border-radius:8px; padding:7px 9px; font-size:12.5px; font-family:'Plus Jakarta Sans', sans-serif; outline:none; }
+  .var-field input:focus{ border-color:var(--gold); }
+
+  .total-bar{ background:var(--navy); color:var(--paper); border-radius:14px; padding:13px 16px; display:flex; justify-content:space-between; align-items:center; margin-top:4px; }
+  .total-bar .l{ font-size:11.5px; color:rgba(251,249,245,0.65); }
+  .total-bar .v{ font-family:'Sora', sans-serif; font-size:17px; font-weight:600; }
+
+  .note-box{ display:flex; gap:10px; background:var(--paper-2); border-radius:12px; padding:12px 14px; margin-top:14px; }
+  .note-box i{ color:var(--gold); font-size:15px; margin-top:1px; }
+  .note-box p{ margin:0; font-size:12px; color:var(--ink-soft); line-height:1.5; }
+
+  .method-grid{ display:grid; grid-template-columns:1fr 1fr; gap:9px; margin-top:14px; }
+  .method-card{ border:1.5px solid var(--line); border-radius:12px; padding:13px 10px; text-align:center; cursor:pointer; background:#fff; }
+  .method-card i{ font-size:19px; color:var(--ink-soft); display:block; margin-bottom:6px; }
+  .method-card span{ font-size:11.5px; font-weight:700; }
+  .method-card.selected{ border-color:var(--gold); background:rgba(47,175,100,0.08); }
+  .method-card.selected i{ color:var(--gold); }
+
+  /* Suivi / historique */
+  .pay-card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:12px 14px; display:flex; align-items:center; gap:11px; margin-bottom:9px; }
+  .status-badge{ display:inline-flex; align-items:center; gap:5px; font-size:10.5px; font-weight:700; padding:4px 9px; border-radius:20px; white-space:nowrap; }
+  .status-badge.ok{ background:var(--teal-bg); color:var(--teal); }
+  .status-badge.pending{ background:var(--amber-bg); color:var(--amber); }
+  .status-badge.fail{ background:var(--danger-bg); color:var(--danger); }
+  .retry-btn{ margin-top:6px; background:none; border:1px solid var(--danger); color:var(--danger); font-size:10.5px; font-weight:700; padding:4px 9px; border-radius:8px; cursor:pointer; }
+
+  .hist-card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:13px 14px; margin-bottom:9px; display:flex; align-items:center; gap:12px; }
+  .hist-icon{ width:38px; height:38px; border-radius:10px; background:var(--paper-2); color:var(--gold); display:flex; align-items:center; justify-content:center; font-size:15px; flex-shrink:0; }
+  .hist-info{ flex:1; }
+  .hist-title{ font-weight:700; font-size:13px; }
+  .hist-sub{ font-size:11px; color:var(--ink-soft); margin-top:2px; }
+  .hist-total{ font-family:'Sora', sans-serif; font-size:13px; font-weight:600; text-align:right; }
+  .export-row{ display:flex; gap:8px; margin-bottom:16px; }
+  .export-btn{ flex:1; background:var(--paper-2); border:1px solid var(--line); border-radius:10px; padding:9px; text-align:center; font-size:11.5px; font-weight:700; color:var(--ink); cursor:pointer; }
+  .export-btn i{ display:block; margin-bottom:4px; color:var(--gold); font-size:14px; }
+  .bulletin-row{ display:flex; align-items:center; gap:10px; padding:9px 0; border-top:1px solid var(--line); }
+  .bulletin-row:first-child{ border-top:none; }
+  .bulletin-row i{ color:var(--teal); font-size:14px; }
+  .bulletin-row .n{ flex:1; font-size:12.5px; font-weight:600; }
+  .bulletin-row button{ background:none; border:1px solid var(--line); border-radius:8px; padding:5px 10px; font-size:10.5px; font-weight:700; color:var(--ink-soft); cursor:pointer; }
+
+  .section-title{ font-size:11.5px; text-transform:uppercase; letter-spacing:0.05em; color:var(--ink-soft); font-weight:700; margin:18px 0 10px; display:flex; align-items:center; gap:6px; }
+  .section-title:first-child{ margin-top:0; }
+  .section-title i{ color:var(--gold); font-size:12px; }
+  .field-grid{ display:grid; grid-template-columns:1fr 1fr; gap:12px; }
+  .field-grid .full{ grid-column:1 / -1; }
+
+  .toggle-row{ display:flex; align-items:center; justify-content:space-between; padding:11px 0; border-top:1px solid var(--line); }
+  .toggle-row:first-of-type{ border-top:none; }
+  .toggle-left{ display:flex; align-items:center; gap:10px; }
+  .toggle-left i{ color:var(--teal); font-size:14px; width:16px; }
+  .toggle-left .t{ font-size:13px; font-weight:700; }
+  .toggle-left .s{ font-size:11px; color:var(--ink-soft); }
+  .switch{ position:relative; width:40px; height:22px; flex-shrink:0; }
+  .switch input{ opacity:0; width:0; height:0; }
+  .slider{ position:absolute; inset:0; background:var(--line); border-radius:20px; cursor:pointer; transition:.2s; }
+  .slider::before{ content:""; position:absolute; width:16px; height:16px; left:3px; top:3px; background:#fff; border-radius:50%; transition:.2s; }
+  .switch input:checked + .slider{ background:var(--teal); }
+  .switch input:checked + .slider::before{ transform:translateX(18px); }
+
+  .link-row{ display:flex; align-items:center; justify-content:space-between; padding:12px 2px; border-top:1px solid var(--line); cursor:pointer; }
+  .link-row:first-of-type{ border-top:none; }
+  .link-row .l{ display:flex; align-items:center; gap:10px; font-size:13px; font-weight:600; }
+  .link-row .l i{ color:var(--ink-soft); width:16px; font-size:13px; }
+  .link-row.danger .l, .link-row.danger .l i{ color:var(--danger); }
+
+  .section-card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px; margin-bottom:14px; }
+
+  .saved-toast{ position:absolute; left:50%; bottom:82px; transform:translate(-50%, 12px); background:var(--navy); color:var(--paper); padding:10px 18px; border-radius:30px; font-size:12.5px; font-weight:600; display:flex; align-items:center; gap:8px; opacity:0; transition:.25s; pointer-events:none; z-index:30; white-space:nowrap; }
+  .saved-toast.show{ opacity:1; transform:translate(-50%, 0); }
+  .saved-toast i{ color:var(--teal); }
+
+  /* Dashboard */
+  .quick-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-top:4px; }
+  .quick-card{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:14px; cursor:pointer; }
+  .quick-card i{ color:var(--gold); font-size:18px; margin-bottom:8px; display:block; }
+  .quick-card .t{ font-weight:700; font-size:13px; }
+  .quick-card .s{ font-size:11px; color:var(--ink-soft); margin-top:2px; }
+
+  /* Modales */
+  .overlay{ display:none; position:absolute; inset:0; background:rgba(15,27,45,0.55); align-items:flex-end; justify-content:center; z-index:10; }
+  .overlay.open{ display:flex; }
+  .modal{ background:var(--paper); border-radius:22px 22px 0 0; width:100%; max-height:88%; overflow-y:auto; box-shadow:0 -20px 50px rgba(0,0,0,0.3); }
+  .modal-head{ padding:18px 20px 14px; border-bottom:1px solid var(--line); display:flex; justify-content:space-between; align-items:center; position:sticky; top:0; background:var(--paper); }
+  .modal-title{ font-family:'Sora', sans-serif; font-size:16px; font-weight:600; margin:0; display:flex; align-items:center; gap:8px; }
+  .modal-title i{ color:var(--gold); font-size:15px; }
+  .modal-close{ background:var(--paper-2); border:none; width:28px; height:28px; border-radius:9px; font-size:15px; color:var(--ink-soft); cursor:pointer; }
+  .modal-body{ padding:18px 20px; }
+  .modal-foot{ padding:14px 20px 20px; display:flex; gap:10px; }
+  .modal .btn{ flex:1; margin-top:0; }
+
+  .cnss-toggle{ display:flex; align-items:center; justify-content:space-between; background:var(--paper-2); border-radius:12px; padding:12px 14px; margin-top:4px; }
+  .cnss-toggle-left{ display:flex; align-items:center; gap:10px; }
+  .cnss-toggle-left i{ color:var(--teal); font-size:16px; }
+  .cnss-toggle-left .t{ font-size:13px; font-weight:700; }
+  .cnss-toggle-left .s{ font-size:11px; color:var(--ink-soft); }
+
+  .dropzone{ border:1.5px dashed var(--line); border-radius:12px; padding:26px 16px; text-align:center; background:var(--paper-2); cursor:pointer; }
+  .dropzone i{ font-size:22px; color:var(--gold); margin-bottom:8px; display:block; }
+  .dropzone p{ margin:0; font-size:12.5px; font-weight:600; }
+  .dropzone span{ font-size:11px; color:var(--ink-soft); }
+  .dropzone input{ display:none; }
+  .import-summary{ display:none; margin-top:14px; }
+  .import-summary.show{ display:block; }
+  .import-stats{ display:flex; gap:8px; margin-bottom:10px; }
+  .import-stat{ flex:1; border-radius:10px; padding:10px; text-align:center; }
+  .import-stat.ok{ background:var(--teal-bg); color:var(--teal); }
+  .import-stat.ko{ background:var(--danger-bg); color:var(--danger); }
+  .import-stat .n{ font-family:'Sora', sans-serif; font-size:18px; font-weight:600; }
+  .import-stat .l{ font-size:10.5px; font-weight:600; }
+  .import-errors{ border:1px solid var(--line); border-radius:10px; overflow:hidden; }
+  .import-error-row{ display:flex; justify-content:space-between; padding:8px 11px; font-size:11.5px; border-bottom:1px solid var(--line); }
+  .import-error-row:last-child{ border-bottom:none; }
+  .import-error-row span:last-child{ color:var(--danger); font-weight:600; }
+
+  /* Nav basse */
+  .bottom-nav{ position:absolute; left:0; right:0; bottom:0; background:#fff; border-top:1px solid var(--line); padding:8px 6px calc(10px + env(safe-area-inset-bottom)); display:flex; justify-content:space-around; z-index:5; }
+  .nav-btn{ background:none; border:none; cursor:pointer; display:flex; flex-direction:column; align-items:center; gap:3px; padding:6px 4px; border-radius:10px; color:var(--ink-soft); flex:1; max-width:70px; }
+  .nav-btn i{ font-size:17px; }
+  .nav-btn .nav-label{ font-size:9.5px; font-weight:700; max-height:0; opacity:0; overflow:hidden; transition:max-height .18s ease, opacity .18s ease; }
+  .nav-btn.active{ color:var(--gold); }
+  .nav-btn.active .nav-label{ max-height:14px; opacity:1; }
+
+  .footnote{ text-align:center; font-size:11px; color:rgba(251,249,245,0.45); margin:14px 0 0; }
+  .brand{ display:flex; align-items:center; gap:10px; margin-bottom:22px; color:#F1EDE4; }
+  .brand .mark{ width:30px; height:30px; border-radius:9px; background:var(--gold); display:flex; align-items:center; justify-content:center; font-family:'Sora', sans-serif; font-weight:700; color:var(--navy); font-size:15px; }
+  .brand .name{ font-family:'Sora', sans-serif; font-weight:600; font-size:18px; letter-spacing:0.2px; }
+  @media (max-width:480px){ .brand{ display:none; } }
+
+  /* ===== Vue employé (simulation) ===== */
+  :root{ --wa-bg:#E9E0CF; --wa-bubble:#DCF3D1; --wa-green:#128C3E; }
+  .emp-overlay{ display:none; position:absolute; inset:0; background:var(--navy); z-index:40; flex-direction:column; }
+  .emp-overlay.open{ display:flex; }
+  .emp-close-row{ display:flex; justify-content:space-between; align-items:center; padding:14px 16px 0; }
+  .emp-close-row span{ color:var(--paper); font-family:'Sora',sans-serif; font-weight:600; font-size:13px; }
+  .emp-close-row button{ background:rgba(255,255,255,0.1); border:none; color:#fff; width:28px; height:28px; border-radius:9px; font-size:15px; cursor:pointer; }
+  .emp-pane{ display:none; flex:1; flex-direction:column; min-height:0; }
+  .emp-pane.active{ display:flex; }
+
+  #paneSms{ background:linear-gradient(180deg, var(--navy) 0%, var(--navy-2) 60%, #263a52 100%); color:#fff; padding:24px 20px 20px; align-items:center; }
+  .lock-time{ text-align:center; font-family:'Sora', sans-serif; font-weight:300; font-size:46px; margin:6px 0 2px; }
+  .lock-date{ text-align:center; font-size:13px; color:rgba(255,255,255,0.7); margin-bottom:22px; text-transform:capitalize; }
+  .notif-card{ background:rgba(255,255,255,0.94); color:var(--ink); border-radius:16px; padding:14px 16px; display:flex; gap:12px; box-shadow:0 12px 30px rgba(0,0,0,0.25); }
+  .notif-icon{ width:38px; height:38px; border-radius:10px; background:#FFCB05; color:#14213D; display:flex; align-items:center; justify-content:center; font-size:16px; flex-shrink:0; font-weight:800; font-family:'Sora',sans-serif; }
+  .notif-body{ flex:1; }
+  .notif-top{ display:flex; justify-content:space-between; font-size:11px; color:var(--ink-soft); margin-bottom:2px; }
+  .notif-title{ font-weight:700; font-size:13.5px; }
+  .notif-text{ font-size:12.5px; color:var(--ink-soft); margin-top:2px; line-height:1.4; }
+  .notif-card.wa{ margin-top:12px; }
+  .notif-icon.wa{ background:var(--wa-green); color:#fff; }
+  .hint-pill{ margin-top:20px; background:rgba(255,255,255,0.08); border-radius:20px; padding:8px 16px; font-size:11.5px; color:rgba(255,255,255,0.65); text-align:center; }
+
+  #paneWa{ background:var(--wa-bg); }
+  .wa-header{ background:var(--wa-green); color:#fff; padding:12px 16px; display:flex; align-items:center; gap:10px; flex-shrink:0; }
+  .wa-avatar{ width:36px; height:36px; border-radius:50%; background:#fff; color:var(--wa-green); display:flex; align-items:center; justify-content:center; font-family:'Sora',sans-serif; font-weight:700; font-size:13px; }
+  .wa-header .n{ font-weight:700; font-size:14px; }
+  .wa-header .s{ font-size:11px; color:rgba(255,255,255,0.75); }
+  .wa-header i{ margin-left:auto; font-size:15px; opacity:0.85; }
+  .wa-body{ flex:1; padding:14px 12px; overflow-y:auto; }
+  .wa-date-chip{ text-align:center; margin-bottom:14px; }
+  .wa-date-chip span{ background:rgba(255,255,255,0.6); font-size:10.5px; color:var(--ink-soft); padding:3px 10px; border-radius:8px; }
+  .bubble{ background:var(--wa-bubble); border-radius:10px 10px 10px 2px; padding:9px 11px; max-width:86%; font-size:13px; color:#1B2B1E; line-height:1.5; margin-bottom:10px; box-shadow:0 1px 1px rgba(0,0,0,0.08); }
+  .bubble .time{ display:block; text-align:right; font-size:10px; color:#5f7a63; margin-top:4px; }
+  .doc-card{ background:#fff; border-radius:10px 10px 10px 2px; padding:12px; max-width:86%; margin-bottom:10px; box-shadow:0 1px 1px rgba(0,0,0,0.08); cursor:pointer; }
+  .doc-card-inner{ display:flex; align-items:center; gap:10px; background:var(--paper-2); border-radius:8px; padding:10px; }
+  .doc-card-inner i{ font-size:22px; color:#D8412F; }
+  .doc-card-inner .n{ font-size:12.5px; font-weight:700; color:var(--ink); }
+  .doc-card-inner .s{ font-size:10.5px; color:var(--ink-soft); }
+  .doc-caption{ font-size:11.5px; color:var(--ink-soft); margin-top:6px; }
+  .wa-footer{ padding:10px 12px; background:#f0ede6; display:flex; align-items:center; gap:8px; flex-shrink:0; }
+  .wa-input{ flex:1; background:#fff; border-radius:20px; padding:9px 14px; font-size:12.5px; color:var(--ink-soft); }
+  .wa-mic{ width:36px; height:36px; border-radius:50%; background:var(--wa-green); color:#fff; display:flex; align-items:center; justify-content:center; }
+
+  #paneBulletin{ background:#5b5b5b; padding:16px; overflow-y:auto; }
+  .payslip{ background:#fff; border-radius:6px; padding:22px 20px; box-shadow:0 6px 20px rgba(0,0,0,0.3); }
+  .payslip-head{ display:flex; justify-content:space-between; align-items:flex-start; border-bottom:2px solid var(--navy); padding-bottom:12px; margin-bottom:14px; }
+  .payslip-brand{ display:flex; align-items:center; gap:8px; }
+  .payslip-brand .mark{ width:26px; height:26px; border-radius:8px; background:var(--gold); display:flex; align-items:center; justify-content:center; font-family:'Sora',sans-serif; font-weight:700; color:var(--navy); font-size:12px; }
+  .payslip-brand .n{ font-family:'Sora',sans-serif; font-weight:700; font-size:14px; color:var(--navy); }
+  .payslip-head .period{ text-align:right; font-size:11px; color:var(--ink-soft); }
+  .payslip-head .period strong{ display:block; font-size:13px; color:var(--ink); }
+  .payslip-company{ font-size:11.5px; color:var(--ink-soft); margin-bottom:16px; line-height:1.6; }
+  .payslip-company b{ color:var(--ink); }
+  .payslip-emp{ background:var(--paper-2); border-radius:8px; padding:10px 12px; font-size:11.5px; margin-bottom:16px; display:grid; grid-template-columns:1fr 1fr; gap:4px 10px; }
+  .payslip-emp span{ color:var(--ink-soft); }
+  .payslip-emp b{ color:var(--ink); }
+  .payslip-table{ width:100%; border-collapse:collapse; font-size:12px; margin-bottom:14px; }
+  .payslip-table th{ text-align:left; font-size:10px; text-transform:uppercase; color:var(--ink-soft); border-bottom:1px solid var(--line); padding:6px 4px; }
+  .payslip-table td{ padding:7px 4px; border-bottom:1px solid var(--line); }
+  .payslip-table td:last-child, .payslip-table th:last-child{ text-align:right; }
+  .payslip-total{ display:flex; justify-content:space-between; align-items:center; background:var(--navy); color:#fff; border-radius:8px; padding:11px 14px; margin-bottom:18px; }
+  .payslip-total .l{ font-size:11.5px; color:rgba(251,249,245,0.7); }
+  .payslip-total .v{ font-family:'Sora',sans-serif; font-size:16px; font-weight:700; color:var(--gold); }
+  .payslip-sign{ display:flex; justify-content:flex-end; gap:20px; }
+  .stamp{ width:64px; height:64px; border:2px solid var(--teal); border-radius:50%; display:flex; align-items:center; justify-content:center; transform:rotate(-12deg); color:var(--teal); font-size:9px; font-weight:800; text-align:center; line-height:1.2; text-transform:uppercase; }
+  .sign-line{ text-align:center; }
+  .sign-line .mark2{ font-family:'Sora',sans-serif; font-style:italic; font-size:20px; color:var(--navy); border-bottom:1px solid var(--ink); padding:0 14px 4px; }
+  .sign-line .l{ font-size:9.5px; color:var(--ink-soft); margin-top:4px; }
+
+  /* Login gate */
+  #loginFlow{display:none;flex-direction:column;flex:1;}
+  #loginFlow.active{display:flex !important;}
+  .login-switch{text-align:center;margin-top:16px;font-size:13px;color:var(--ink-soft);}
+  .login-switch a{color:var(--teal);font-weight:700;cursor:pointer;}
+  .login-switch a:hover{text-decoration:underline;}
+
+</style>
+</head>
+<body>
+
+<div class="brand"><img class="mark" src="koyapay-logo.png" alt="KoyaPay" style="width:30px;height:30px;border-radius:9px;object-fit:contain;background:#fff;"><div class="name">KoyaPay</div></div>
+
+<div class="app">
+
+
+  <!-- ============ LOGIN ============ -->
+  <div id="loginFlow" class="active" style="display:flex;flex-direction:column;flex:1;">
+    <div class="topbar">
+      <p class="step-label">Connexion</p>
+      <h1 class="step-title">Bon retour sur KoyaPay</h1>
+      <p class="step-sub">Connectez-vous avec l'email et le mot de passe de votre compte entreprise.</p>
+    </div>
+    <div class="content no-nav">
+      <div class="screen active">
+        <label class="first">Email professionnel</label>
+        <input type="email" id="loginEmail" placeholder="nom@entreprise.com" autocomplete="username">
+        <div class="error" id="err-loginEmail">Entrez une adresse email valide.</div>
+
+        <label style="margin-top:14px;">Mot de passe</label>
+        <input type="password" id="loginPassword" placeholder="Votre mot de passe" autocomplete="current-password">
+        <div class="error" id="err-loginPassword">Mot de passe incorrect.</div>
+
+        <button class="btn btn-primary" onclick="doLogin()" style="margin-top:18px;">Se connecter</button>
+        <div class="login-switch">Pas encore de compte ? <a onclick="showOnboarding()">Créer un compte</a></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ ONBOARDING ============ -->
+  <div id="onboardingFlow" style="display:none;">
+    <div class="topbar">
+      <p class="step-label" id="obStepLabel">Étape 1 sur 3</p>
+      <h1 class="step-title" id="obStepTitle">Créer votre compte</h1>
+      <p class="step-sub" id="obStepSub">Renseignez vos informations pour commencer à payer vos équipes en un seul dépôt.</p>
+      <div class="progress"><i><span id="obP1"></span></i><i><span id="obP2"></span></i><i><span id="obP3"></span></i></div>
+    </div>
+    <div class="content no-nav">
+
+      <div class="screen active" id="obScreen1">
+        <label class="first">Téléphone</label>
+        <div class="field-row">
+          <select id="indicatif">
+            <option value="+229">🇧🇯 +229</option>
+            <option value="+225">🇨🇮 +225</option>
+            <option value="+221">🇸🇳 +221</option>
+            <option value="+33">🇫🇷 +33</option>
+            <option value="+1">🇺🇸 +1</option>
+          </select>
+          <input type="tel" id="phone" placeholder="01 97 00 00 00" inputmode="numeric">
+        </div>
+        <div class="error" id="err-phone">Entrez un numéro de téléphone valide.</div>
+
+        <label>Email professionnel</label>
+        <input type="email" id="email" placeholder="nom@entreprise.com">
+        <div class="error" id="err-email">Entrez une adresse email valide.</div>
+
+        <label>Mot de passe</label>
+        <input type="password" id="password" placeholder="8 caractères minimum">
+        <p class="hint">Au moins 8 caractères, avec une majuscule, un chiffre et un symbole.</p>
+        <div class="error" id="err-password">Le mot de passe doit contenir une majuscule, un chiffre et un symbole (8 caractères minimum).</div>
+
+        <button class="btn btn-primary" onclick="obGoToStep2()">Continuer</button>
+        <div class="login-switch">Déjà un compte ? <a onclick="showLogin()">Se connecter</a></div>
+      </div>
+
+      <div class="screen" id="obScreen2">
+        <p style="font-size:13px; color:var(--ink-soft); margin:0 0 4px;">Code envoyé par email à <strong id="otpPhoneDisplay" style="color:var(--ink);"></strong></p>
+        <label class="first">Code de vérification</label>
+        <div class="otp-row">
+          <input maxlength="1" inputmode="numeric" class="otp-digit"><input maxlength="1" inputmode="numeric" class="otp-digit">
+          <input maxlength="1" inputmode="numeric" class="otp-digit"><input maxlength="1" inputmode="numeric" class="otp-digit">
+          <input maxlength="1" inputmode="numeric" class="otp-digit"><input maxlength="1" inputmode="numeric" class="otp-digit">
+        </div>
+        <div class="error" id="err-otp">Code incorrect ou incomplet. Réessayez.</div>
+        <div class="note-box" id="otpLockMsg" style="display:none; background:var(--danger-bg);">
+          <i class="fa-solid fa-lock" style="color:var(--danger);"></i>
+          <p style="color:var(--danger);">Trop de tentatives. Réessayez dans <strong id="otpLockTimer">15:00</strong>.</p>
+        </div>
+        <p class="hint" style="margin-top:8px;">Astuce démo : le code valide est <strong>123456</strong>.</p>
+        <div class="resend"><span id="resendTimer">Renvoyer le code dans 60s</span><button class="btn-link" id="resendBtn" style="display:none;" onclick="obResendCode()">Renvoyer le code</button></div>
+
+        <p class="section-title" style="margin-top:16px;"><i class="fa-solid fa-flask"></i>Tester un cas d'erreur (démo)</p>
+        <div style="display:flex; gap:6px; flex-wrap:wrap;">
+          <button type="button" class="btn-ghost" style="flex:1; margin-top:0; padding:9px 6px; font-size:11px;" onclick="obSimulate('expired')">Code expiré</button>
+          <button type="button" class="btn-ghost" style="flex:1; margin-top:0; padding:9px 6px; font-size:11px;" onclick="obSimulate('sms')">Échec d'envoi de l'email</button>
+        </div>
+
+        <button class="btn btn-primary" id="otpVerifyBtn" onclick="obGoToStep3()">Vérifier</button>
+        <button class="btn btn-ghost" onclick="obGoToStep(1)">Retour</button>
+      </div>
+
+      <div class="screen" id="obScreen3">
+        <label class="first">Nom de l'entreprise</label>
+        <input type="text" id="companyName" placeholder="Ex : Atlas Textile SARL">
+        <div class="error" id="err-companyName">Indiquez le nom de votre entreprise.</div>
+
+        <label>Numéro WhatsApp</label>
+        <input type="tel" id="companyWhatsapp" placeholder="01 97 00 00 00" inputmode="numeric">
+        <div class="error" id="err-whatsapp">Indiquez un numéro WhatsApp.</div>
+        <label class="checkbox-row"><input type="checkbox" id="sameAsPhone" onchange="toggleSameWhatsapp()"><span>C'est le même numéro que celui saisi à l'inscription</span></label>
+
+        <label style="margin-top:16px;">Cachet de l'entreprise</label>
+        <div class="upload" id="obUploadCachet" onclick="triggerUpload('obFileCachet')">
+          <span id="obUploadCachetText">Déposer une image (PNG, JPG)</span>
+          <input type="file" id="obFileCachet" accept="image/*" onchange="handleUpload(this,'obUploadCachet','obUploadCachetText')">
+          <button type="button" class="upload-remove" onclick="removeUpload(event,'obFileCachet','obUploadCachet','obUploadCachetText','Déposer une image (PNG, JPG)')">×</button>
+        </div>
+
+        <label>Signature autorisée</label>
+        <div class="upload" id="obUploadSignature" onclick="triggerUpload('obFileSignature')">
+          <span id="obUploadSignatureText">Déposer une image (PNG, JPG)</span>
+          <input type="file" id="obFileSignature" accept="image/*" onchange="handleUpload(this,'obUploadSignature','obUploadSignatureText')">
+          <button type="button" class="upload-remove" onclick="removeUpload(event,'obFileSignature','obUploadSignature','obUploadSignatureText','Déposer une image (PNG, JPG)')">×</button>
+        </div>
+
+        <button class="btn btn-primary" onclick="obGoToStep4()">Créer mon espace</button>
+        <button class="btn btn-ghost" onclick="obGoToStep(2)">Retour</button>
+      </div>
+
+      <div class="screen" id="obScreen4">
+        <div class="done-wrap">
+          <div class="done-icon"><i class="fa-solid fa-check"></i></div>
+          <p class="done-title">Votre espace est prêt</p>
+          <p class="done-sub">Vous pouvez maintenant ajouter vos employés et préparer votre première paie.</p>
+        </div>
+        <div class="summary-card">
+          <div class="summary-row"><span>Entreprise</span><span id="sumCompany">—</span></div>
+          <div class="summary-row"><span>Téléphone</span><span id="sumPhone">—</span></div>
+          <div class="summary-row"><span>Email</span><span id="sumEmail">—</span></div>
+          <div class="summary-row"><span>WhatsApp</span><span id="sumWhatsapp">—</span></div>
+        </div>
+        <button class="btn btn-primary" onclick="enterApp()">Accéder à mon espace</button>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ============ APPLICATION PRINCIPALE ============ -->
+  <div id="mainApp" style="display:none; flex-direction:column; flex:1; min-height:0;">
+
+    <!-- Accueil -->
+    <div class="view" id="viewHome">
+      <div class="topbar">
+        <div class="topbar-title"><i class="fa-solid fa-house"></i><div><h1 id="homeCompanyName">Atlas Textile SARL</h1><p>Tableau de bord</p></div></div>
+        <div class="stat-strip">
+          <div class="stat-pill"><i class="fa-solid fa-user-group"></i><div><div class="val" id="homeStatEmp">3</div><div class="lbl">Employés</div></div></div>
+          <div class="stat-pill"><i class="fa-solid fa-sack-dollar"></i><div><div class="val" id="homeStatMass">0</div><div class="lbl">Masse salariale</div></div></div>
+        </div>
+      </div>
+      <div class="content">
+        <p class="section-title"><i class="fa-solid fa-bolt"></i>Actions rapides</p>
+        <div class="quick-grid">
+          <div class="quick-card" onclick="switchView('employees')"><i class="fa-solid fa-users"></i><div class="t">Employés</div><div class="s">Ajouter, importer, gérer</div></div>
+          <div class="quick-card" onclick="switchView('payroll')"><i class="fa-solid fa-money-bill-transfer"></i><div class="t">Nouvelle paie</div><div class="s">Préparer & déposer</div></div>
+          <div class="quick-card" onclick="switchView('tracking')"><i class="fa-solid fa-chart-line"></i><div class="t">Suivi</div><div class="s">Statuts en direct</div></div>
+          <div class="quick-card" onclick="switchView('settings')"><i class="fa-solid fa-gear"></i><div class="t">Paramètres</div><div class="s">Entreprise & sécurité</div></div>
+        </div>
+        <p class="section-title"><i class="fa-solid fa-clock-rotate-left"></i>Dernière paie</p>
+        <div class="hist-card">
+          <div class="hist-icon"><i class="fa-solid fa-circle-check"></i></div>
+          <div class="hist-info"><div class="hist-title">Paie d'août 2026</div><div class="hist-sub">3 employés · payée le 2 août</div></div>
+          <div class="hist-total">366 500 FCFA</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Employés -->
+    <div class="view" id="viewEmployees" style="display:none;">
+      <div class="topbar">
+        <div class="topbar-row">
+          <div class="topbar-title"><i class="fa-solid fa-users"></i><div><h1>Employés</h1><p>Ajoutez et gérez votre équipe</p></div></div>
+          <button class="add-btn" onclick="openAdd()"><i class="fa-solid fa-plus"></i></button>
+        </div>
+        <div class="stat-strip">
+          <div class="stat-pill"><i class="fa-solid fa-user-group"></i><div><div class="val" id="statCount">3</div><div class="lbl">Employés</div></div></div>
+          <div class="stat-pill"><i class="fa-solid fa-sack-dollar"></i><div><div class="val" id="statTotal">0</div><div class="lbl">Masse salariale</div></div></div>
+          <div class="stat-pill"><i class="fa-solid fa-shield-halved"></i><div><div class="val" id="statCnss">0</div><div class="lbl">Déclarés CNSS</div></div></div>
+        </div>
+      </div>
+      <div class="content">
+        <div class="search-row">
+          <i class="fa-solid fa-magnifying-glass"></i>
+          <input placeholder="Rechercher un employé…" oninput="filterList(this.value)">
+          <i class="fa-solid fa-file-excel" style="cursor:pointer;" onclick="openImport()" title="Importer un fichier Excel"></i>
+        </div>
+        <div class="list" id="empList"></div>
+        <div class="empty-state" id="emptyState" style="display:none;"><i class="fa-solid fa-user-plus"></i><p>Aucun employé pour le moment.</p></div>
+      </div>
+    </div>
+
+    <!-- Paie -->
+    <div class="view" id="viewPayroll" style="display:none;">
+      <div class="topbar">
+        <p class="step-label" id="payStepLabel">Étape 1 sur 4</p>
+        <h1 class="step-title" id="payStepTitle">Préparez la paie</h1>
+        <p class="step-sub" id="payStepSub">Ajustez les primes, transport ou retenues de chaque employé pour ce mois.</p>
+        <div class="progress"><i><span id="payP1"></span></i><i><span id="payP2"></span></i><i><span id="payP3"></span></i><i><span id="payP4"></span></i></div>
+      </div>
+      <div class="content" style="display:flex; flex-direction:column;">
+
+        <div class="screen active" id="payScreen1">
+          <div id="payEmpList" style="margin-bottom:10px;"></div>
+          <div class="total-bar"><span class="l">Total général</span><span class="v" id="grandTotal">0 FCFA</span></div>
+          <button class="btn btn-primary" onclick="payGoToStep(2)">Choisir la date de paiement</button>
+        </div>
+
+        <div class="screen" id="payScreen2">
+          <label class="first">Date de paiement</label>
+          <input type="date" id="payDate">
+          <div class="note-box"><i class="fa-solid fa-circle-info"></i><p>Vous pourrez encore modifier la paie jusqu'à la veille de cette date. Passé ce délai, elle sera verrouillée.</p></div>
+          <button class="btn btn-primary" onclick="payGoToStep3()">Voir le récapitulatif</button>
+          <button class="btn btn-ghost" onclick="payGoToStep(1)">Retour</button>
+        </div>
+
+        <div class="screen" id="payScreen3">
+          <div class="summary-card plain">
+            <div class="summary-row"><span><i class="fa-solid fa-users"></i>Employés</span><span id="sumEmpCount">3</span></div>
+            <div class="summary-row"><span><i class="fa-solid fa-calendar-day"></i>Date de paiement</span><span id="sumDate">—</span></div>
+            <div class="summary-row"><span><i class="fa-solid fa-sack-dollar"></i>Total net</span><span id="sumNet">0 FCFA</span></div>
+            <div class="summary-row"><span><i class="fa-solid fa-receipt"></i>Frais KoyaPay</span><span id="sumFees">0 FCFA</span></div>
+            <div class="summary-row grand"><span><i class="fa-solid fa-wallet"></i>Montant à déposer</span><span id="sumTotal">0 FCFA</span></div>
+          </div>
+          <label class="first" style="margin-top:18px;">Méthode de dépôt</label>
+          <div class="method-grid">
+            <div class="method-card selected" data-m="MTN MoMo" onclick="selectMethod(this)"><i class="fa-solid fa-mobile-screen-button"></i><span>MTN MoMo</span></div>
+            <div class="method-card" data-m="Moov Money" onclick="selectMethod(this)"><i class="fa-solid fa-mobile-screen-button"></i><span>Moov Money</span></div>
+            <div class="method-card" data-m="Celtiis Cash" onclick="selectMethod(this)"><i class="fa-solid fa-mobile-screen-button"></i><span>Celtiis Cash</span></div>
+            <div class="method-card" data-m="Virement bancaire" onclick="selectMethod(this)"><i class="fa-solid fa-building-columns"></i><span>Virement</span></div>
+          </div>
+
+          <div class="error" id="err-deposit" style="margin-top:14px;"></div>
+
+          <p class="section-title" style="margin-top:16px;"><i class="fa-solid fa-flask"></i>Tester un cas d'erreur (démo)</p>
+          <select id="depositScenario" style="margin-top:0; max-width:100%;">
+            <option value="ok">Succès (par défaut)</option>
+            <option value="balance">Solde insuffisant</option>
+            <option value="timeout">Délai dépassé (timeout)</option>
+            <option value="operator">Échec opérateur</option>
+            <option value="invalid">Numéro invalide</option>
+            <option value="blocked">Compte bloqué</option>
+            <option value="ceiling">Plafond atteint</option>
+          </select>
+
+          <button class="btn btn-primary" id="depositBtn" onclick="payDeposit()">Déposer les fonds</button>
+          <button class="btn btn-ghost" onclick="payGoToStep(2)">Retour</button>
+        </div>
+
+        <div class="screen" id="payScreen4">
+          <div class="done-wrap">
+            <div class="done-icon"><i class="fa-solid fa-check"></i></div>
+            <p class="done-title">Paiement programmé</p>
+            <p class="done-sub" id="confirmSub">Vos employés seront payés à la date choisie et recevront leur bulletin sur WhatsApp.</p>
+            <button class="btn btn-primary" onclick="switchView('tracking')">Voir le suivi</button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Suivi / historique -->
+    <div class="view" id="viewTracking" style="display:none;">
+      <div class="topbar">
+        <div class="topbar-title"><i class="fa-solid fa-chart-line"></i><div><h1>Suivi & historique</h1><p id="trackSubtitle">Dernière paie</p></div></div>
+        <div class="tabs">
+          <button class="tab-btn active" onclick="showPane('suivi', this)">Suivi en direct</button>
+          <button class="tab-btn" onclick="showPane('historique', this)">Historique</button>
+        </div>
+      </div>
+      <div class="content">
+        <div class="pane active" id="pane-suivi">
+          <div class="stat-strip" style="margin-top:0; margin-bottom:14px;">
+            <div class="stat-pill" style="background:#fff; border:1px solid var(--line);"><div style="text-align:center; width:100%;"><div class="val" id="cOk" style="color:var(--teal);">0</div><div class="lbl" style="color:var(--ink-soft);">Payés</div></div></div>
+            <div class="stat-pill" style="background:#fff; border:1px solid var(--line);"><div style="text-align:center; width:100%;"><div class="val" id="cPending" style="color:var(--amber);">0</div><div class="lbl" style="color:var(--ink-soft);">En attente</div></div></div>
+            <div class="stat-pill" style="background:#fff; border:1px solid var(--line);"><div style="text-align:center; width:100%;"><div class="val" id="cFail" style="color:var(--danger);">0</div><div class="lbl" style="color:var(--ink-soft);">Échecs</div></div></div>
+          </div>
+          <div id="trackPayList"></div>
+          <div class="quick-card" style="margin-top:10px; display:flex; align-items:center; gap:12px;" onclick="openEmployeeView()">
+            <i class="fa-solid fa-mobile-screen-button" style="margin:0; font-size:20px;"></i>
+            <div><div class="t">Voir côté employé</div><div class="s">Notification, WhatsApp & bulletin reçus</div></div>
+          </div>
+        </div>
+        <div class="pane" id="pane-historique">
+          <div class="export-row">
+            <div class="export-btn" onclick="settingsToast('Journal exporté (démo)')"><i class="fa-solid fa-file-arrow-down"></i>Exporter le journal</div>
+            <div class="export-btn" onclick="settingsToast('Bulletins exportés (démo)')"><i class="fa-solid fa-folder-open"></i>Tous les bulletins</div>
+          </div>
+          <p class="section-title"><i class="fa-solid fa-clock-rotate-left"></i>Paies précédentes</p>
+          <div class="hist-card"><div class="hist-icon"><i class="fa-solid fa-circle-check"></i></div><div class="hist-info"><div class="hist-title">Paie d'août 2026</div><div class="hist-sub">3 employés · payée le 2 août</div></div><div class="hist-total">366 500 FCFA</div></div>
+          <div class="hist-card"><div class="hist-icon"><i class="fa-solid fa-circle-check"></i></div><div class="hist-info"><div class="hist-title">Paie de juillet 2026</div><div class="hist-sub">3 employés · payée le 1 juil.</div></div><div class="hist-total">351 000 FCFA</div></div>
+          <p class="section-title" style="margin-top:18px;"><i class="fa-solid fa-file-invoice"></i>Bulletins envoyés</p>
+          <div class="hist-card" style="display:block;" id="bulletinList"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Paramètres -->
+    <div class="view" id="viewSettings" style="display:none;">
+      <div class="topbar">
+        <div class="topbar-title"><i class="fa-solid fa-gear"></i><div><h1>Paramètres</h1><p>Informations, sécurité et documents</p></div></div>
+      </div>
+      <div class="content">
+        <div class="section-card">
+          <p class="section-title"><i class="fa-solid fa-building"></i>Informations de l'entreprise</p>
+          <div style="margin-bottom:13px;"><label>Nom de l'entreprise</label><input id="setCompanyName" value="Atlas Textile SARL"></div>
+          <div style="margin-bottom:13px;"><label>Numéro WhatsApp</label><input value="+229 01 97 12 34 56"></div>
+          <div><label>Email professionnel</label><input value="contact@atlastextile.bj" type="email"></div>
+        </div>
+        <div class="section-card">
+          <p class="section-title"><i class="fa-solid fa-stamp"></i>Cachet & signature</p>
+          <div class="upload-grid">
+            <div class="upload filled" id="setUploadCachet" onclick="triggerUpload('setFileCachet')">
+              <span id="setUploadCachetText">✓ cachet.png</span>
+              <input type="file" id="setFileCachet" accept="image/*" onchange="handleUpload(this,'setUploadCachet','setUploadCachetText')">
+              <button type="button" class="upload-remove" onclick="removeUpload(event,'setFileCachet','setUploadCachet','setUploadCachetText','Déposer le cachet')">×</button>
+            </div>
+            <div class="upload filled" id="setUploadSignature" onclick="triggerUpload('setFileSignature')">
+              <span id="setUploadSignatureText">✓ signature.png</span>
+              <input type="file" id="setFileSignature" accept="image/*" onchange="handleUpload(this,'setUploadSignature','setUploadSignatureText')">
+              <button type="button" class="upload-remove" onclick="removeUpload(event,'setFileSignature','setUploadSignature','setUploadSignatureText','Déposer la signature')">×</button>
+            </div>
+          </div>
+          <p style="font-size:11px; color:var(--ink-soft); margin:10px 0 0;">Utilisés pour signer automatiquement les bulletins de paie.</p>
+        </div>
+        <div class="section-card">
+          <p class="section-title"><i class="fa-solid fa-shield-halved"></i>Sécurité</p>
+          <div class="toggle-row"><div class="toggle-left"><i class="fa-solid fa-key"></i><div><div class="t">Vérification en deux étapes</div><div class="s">Code envoyé par email à chaque connexion</div></div></div><label class="switch"><input type="checkbox" checked><span class="slider"></span></label></div>
+          <div class="toggle-row"><div class="toggle-left"><i class="fa-solid fa-fingerprint"></i><div><div class="t">Verrouillage biométrique</div><div class="s">Empreinte ou reconnaissance faciale</div></div></div><label class="switch"><input type="checkbox"><span class="slider"></span></label></div>
+          <div class="link-row" onclick="settingsToast('Redirection vers le changement de mot de passe')"><div class="l"><i class="fa-solid fa-lock"></i>Changer le mot de passe</div><i class="fa-solid fa-chevron-right"></i></div>
+        </div>
+        <div class="section-card">
+          <p class="section-title"><i class="fa-solid fa-sliders"></i>Général</p>
+          <div class="link-row" onclick="settingsToast('Redirection vers les moyens de paiement')"><div class="l"><i class="fa-solid fa-credit-card"></i>Moyens de dépôt enregistrés</div><i class="fa-solid fa-chevron-right"></i></div>
+          <div class="link-row" onclick="settingsToast('Redirection vers l\'assistance')"><div class="l"><i class="fa-solid fa-circle-question"></i>Aide & assistance</div><i class="fa-solid fa-chevron-right"></i></div>
+          <div class="link-row danger" onclick="settingsToast('Déconnexion simulée')"><div class="l"><i class="fa-solid fa-right-from-bracket"></i>Se déconnecter</div><i class="fa-solid fa-chevron-right"></i></div>
+        </div>
+        <button class="btn btn-primary" onclick="saveSettings()">Enregistrer les modifications</button>
+      </div>
+    </div>
+
+    <div class="bottom-nav">
+      <button class="nav-btn active" data-view="home" data-label="Accueil" onclick="selectNav(this)"><i class="fa-solid fa-house"></i><span class="nav-label">Accueil</span></button>
+      <button class="nav-btn" data-view="employees" data-label="Employés" onclick="selectNav(this)"><i class="fa-solid fa-users"></i><span class="nav-label">Employés</span></button>
+      <button class="nav-btn" data-view="payroll" data-label="Paie" onclick="selectNav(this)"><i class="fa-solid fa-money-bill-transfer"></i><span class="nav-label">Paie</span></button>
+      <button class="nav-btn" data-view="tracking" data-label="Historique" onclick="selectNav(this)"><i class="fa-solid fa-clock-rotate-left"></i><span class="nav-label">Historique</span></button>
+      <button class="nav-btn" data-view="settings" data-label="Réglages" onclick="selectNav(this)"><i class="fa-solid fa-gear"></i><span class="nav-label">Réglages</span></button>
+    </div>
+  </div>
+
+  <!-- Modal Ajout / Édition employé -->
+  <div class="overlay" id="addOverlay">
+    <div class="modal">
+      <div class="modal-head"><h2 class="modal-title"><i class="fa-solid fa-user-pen"></i><span id="modalTitleText">Ajouter un employé</span></h2><button class="modal-close" onclick="closeAdd()">×</button></div>
+      <div class="modal-body">
+        <div class="section-title"><i class="fa-solid fa-id-card"></i>Identité</div>
+        <div class="field-grid">
+          <div><label>Nom</label><input id="empNom" placeholder="Kouassi"><div class="error" id="err-empNom">Nom requis.</div></div>
+          <div><label>Prénom</label><input id="empPrenom" placeholder="Awa"><div class="error" id="err-empPrenom">Prénom requis.</div></div>
+          <div class="full"><label>Email</label><input id="empEmail" type="email" placeholder="awa.kouassi@entreprise.com"></div>
+        </div>
+        <div class="section-title"><i class="fa-solid fa-phone"></i>Contacts</div>
+        <div class="field-grid">
+          <div class="full"><label>Mobile Money (+229)</label><input id="empMomo" placeholder="01 97 00 00 00" inputmode="numeric"><div class="error" id="err-empMomo">Numéro à 10 chiffres requis.</div></div>
+          <div class="full"><label>WhatsApp</label><input id="empWhatsapp" placeholder="01 97 00 00 00" inputmode="numeric"></div>
+          <div class="full"><label class="checkbox-row"><input type="checkbox" id="empSameNumber" onchange="toggleEmpSameNumber()"><span>Même numéro que le Mobile Money</span></label></div>
+        </div>
+        <div class="section-title"><i class="fa-solid fa-wallet"></i>Rémunération</div>
+        <label>Salaire de base (FCFA)</label>
+        <input id="empBase" type="number" min="0" placeholder="0">
+        <p style="font-size:11px; color:var(--ink-soft); margin:6px 0 0;">Primes, transport, commissions et retenues seront demandés au moment de préparer chaque paie mensuelle.</p>
+        <div class="cnss-toggle">
+          <div class="cnss-toggle-left"><i class="fa-solid fa-shield-halved"></i><div><div class="t">Déclaré à la CNSS</div><div class="s">Cotisation sociale appliquée</div></div></div>
+          <label class="switch"><input type="checkbox" id="empCnss"><span class="slider"></span></label>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn btn-ghost" onclick="closeAdd()">Annuler</button><button class="btn btn-primary" onclick="saveEmployee()" id="saveBtnLabel">Ajouter l'employé</button></div>
+    </div>
+  </div>
+
+  <!-- Modal Import Excel -->
+  <div class="overlay" id="importOverlay">
+    <div class="modal">
+      <div class="modal-head"><h2 class="modal-title"><i class="fa-solid fa-file-excel"></i>Importer depuis Excel</h2><button class="modal-close" onclick="closeImport()">×</button></div>
+      <div class="modal-body">
+        <div class="dropzone" onclick="document.getElementById('excelFile').click()">
+          <i class="fa-solid fa-cloud-arrow-up"></i><p>Glissez votre fichier ici ou cliquez pour parcourir</p><span>Formats acceptés : .xlsx, .xls</span>
+          <input type="file" id="excelFile" onchange="handleExcelImport(this)">
+        </div>
+        <div class="error" id="err-import" style="margin-top:10px;"></div>
+        <div class="import-summary" id="importSummary">
+          <div class="import-stats"><div class="import-stat ok"><div class="n" id="importOkCount">0</div><div class="l">réussis</div></div><div class="import-stat ko"><div class="n" id="importKoCount">0</div><div class="l">échoués</div></div></div>
+          <div class="import-errors" id="importErrorsList"></div>
+          <button type="button" class="btn btn-outline btn" style="margin-top:12px;" onclick="downloadImportReport()"><i class="fa-solid fa-download"></i>&nbsp; Télécharger le rapport</button>
+        </div>
+      </div>
+      <div class="modal-foot"><button class="btn btn-ghost" onclick="closeImport()">Fermer</button><button class="btn btn-primary" id="importConfirmBtn" style="display:none;" onclick="confirmImport()">Ajouter les employés valides</button></div>
+    </div>
+  </div>
+
+  <!-- Vue employé (simulation) -->
+  <div class="emp-overlay" id="employeeOverlay">
+    <div class="emp-close-row">
+      <span>Aperçu — côté employé</span>
+      <button onclick="closeEmployeeView()">×</button>
+    </div>
+    <div class="tabs" style="padding:12px 16px 0; background:transparent;">
+      <button class="tab-btn active" onclick="showEmpPane('Sms', this)"><i class="fa-solid fa-bell"></i>Notification</button>
+      <button class="tab-btn" onclick="showEmpPane('Wa', this)"><i class="fa-brands fa-whatsapp"></i>WhatsApp</button>
+      <button class="tab-btn" onclick="showEmpPane('Bulletin', this)"><i class="fa-solid fa-file-invoice"></i>Bulletin</button>
+    </div>
+
+    <div class="emp-pane active" id="paneSms">
+      <div class="lock-time">08:14</div>
+      <div class="lock-date">mercredi 2 septembre</div>
+      <div class="notif-card">
+        <div class="notif-icon">M</div>
+        <div class="notif-body">
+          <div class="notif-top"><span>MTN MoMo</span><span>maintenant</span></div>
+          <div class="notif-title">+125 000 FCFA reçus</div>
+          <div class="notif-text">De : ATLAS TEXTILE SARL. Nouveau solde : 187 400 FCFA. Réf : UP-20260902-114.</div>
+        </div>
+      </div>
+      <div class="notif-card wa">
+        <div class="notif-icon wa"><i class="fa-brands fa-whatsapp"></i></div>
+        <div class="notif-body">
+          <div class="notif-top"><span>KoyaPay</span><span>maintenant</span></div>
+          <div class="notif-title">Votre bulletin de paie est arrivé</div>
+          <div class="notif-text">Bonjour Awa, votre salaire du mois a été déposé. Bulletin joint 📄</div>
+        </div>
+      </div>
+      <div class="hint-pill">Aucune application KoyaPay à installer — tout se passe sur Mobile Money et WhatsApp.</div>
+    </div>
+
+    <div class="emp-pane" id="paneWa">
+      <div class="wa-header">
+        <div class="wa-avatar" style="overflow:hidden; padding:2px;"><img src="koyapay-logo.png" alt="KoyaPay" style="width:100%;height:100%;object-fit:contain;"></div>
+        <div><div class="n">KoyaPay</div><div class="s">Compte professionnel</div></div>
+        <i class="fa-solid fa-phone"></i><i class="fa-solid fa-ellipsis-vertical"></i>
+      </div>
+      <div class="wa-body">
+        <div class="wa-date-chip"><span>Aujourd'hui</span></div>
+        <div class="bubble">Bonjour Awa 👋 Votre salaire de <strong>125 000 FCFA</strong> vient d'être déposé sur votre compte Mobile Money (MTN).<span class="time">08:14 ✓✓</span></div>
+        <div class="doc-card" onclick="showEmpPane('Bulletin', document.querySelectorAll('#employeeOverlay .tab-btn')[2])">
+          <div class="doc-card-inner"><i class="fa-solid fa-file-pdf"></i><div><div class="n">Bulletin_Aout_2026_Kouassi.pdf</div><div class="s">142 Ko · PDF</div></div></div>
+          <div class="doc-caption">Votre bulletin de paie — appuyez pour l'ouvrir</div>
+        </div>
+        <div class="bubble">N'hésitez pas à le conserver pour vos démarches. Bonne journée ! 🌿<span class="time">08:14 ✓✓</span></div>
+      </div>
+      <div class="wa-footer"><div class="wa-input">Écrire un message…</div><div class="wa-mic"><i class="fa-solid fa-microphone"></i></div></div>
+    </div>
+
+    <div class="emp-pane" id="paneBulletin">
+      <div class="payslip">
+        <div class="payslip-head">
+          <div class="payslip-brand"><img class="mark" src="koyapay-logo.png" alt="KoyaPay" style="width:26px;height:26px;border-radius:8px;object-fit:contain;"><div class="n">KoyaPay</div></div>
+          <div class="period">Bulletin de paie<strong>Août 2026</strong></div>
+        </div>
+        <div class="payslip-company"><b>ATLAS TEXTILE SARL</b> — Cotonou, Bénin<br>Contact : +229 01 97 12 34 56</div>
+        <div class="payslip-emp">
+          <div><span>Employé</span><br><b>Awa Kouassi</b></div>
+          <div><span>Mobile Money</span><br><b>+229 01 97 12 34 56</b></div>
+          <div><span>Statut CNSS</span><br><b>Déclaré</b></div>
+          <div><span>Date de paiement</span><br><b>2 septembre 2026</b></div>
+        </div>
+        <table class="payslip-table">
+          <thead><tr><th>Élément</th><th>Montant</th></tr></thead>
+          <tbody>
+            <tr><td>Salaire de base</td><td>125 000 FCFA</td></tr>
+            <tr><td>Commission</td><td>0 FCFA</td></tr>
+            <tr><td>Primes</td><td>0 FCFA</td></tr>
+            <tr><td>Transport</td><td>0 FCFA</td></tr>
+            <tr><td>Autres</td><td>0 FCFA</td></tr>
+            <tr><td>Retenues</td><td>− 0 FCFA</td></tr>
+          </tbody>
+        </table>
+        <div class="payslip-total"><span class="l">Net payé</span><span class="v">125 000 FCFA</span></div>
+        <div class="payslip-sign">
+          <div class="stamp">Atlas<br>Textile<br>SARL</div>
+          <div class="sign-line"><div class="mark2">A. Koudjo</div><div class="l">Signature autorisée</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirmation générique -->
+  <div class="overlay" id="confirmOverlay" style="align-items:center;">
+    <div class="modal" style="border-radius:18px; max-width:320px;">
+      <div class="modal-body" style="text-align:center; padding-top:26px;">
+        <div style="width:52px; height:52px; border-radius:50%; background:var(--danger-bg); color:var(--danger); display:flex; align-items:center; justify-content:center; margin:0 auto 14px; font-size:20px;"><i class="fa-solid fa-trash"></i></div>
+        <p style="font-family:'Sora',sans-serif; font-weight:600; font-size:15px; margin:0 0 6px;" id="confirmTitle">Supprimer cet employé ?</p>
+        <p style="font-size:12.5px; color:var(--ink-soft); margin:0;" id="confirmText">Cette action est définitive.</p>
+      </div>
+      <div class="modal-foot">
+        <button class="btn btn-ghost" onclick="closeConfirm()">Annuler</button>
+        <button class="btn btn-primary" style="background:var(--danger); color:#fff;" id="confirmActionBtn" onclick="confirmYes()">Supprimer</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="saved-toast" id="toast"><i class="fa-solid fa-circle-check"></i><span id="toastMsg">Enregistré</span></div>
+</div>
+
+<p class="footnote">Prototype visuel — parcours complet employeur KoyaPay.</p>
+
+<script>
+/* ===================== Utilitaires partagés ===================== */
+function fmt(n){ return Math.round(n).toLocaleString('fr-FR') + ' FCFA'; }
+function initials(p,n){ return (p[0]||'').toUpperCase() + (n[0]||'').toUpperCase(); }
+function showError(id, show){ document.getElementById('err-'+id).style.display = show ? 'block' : 'none'; }
+
+function formatPhoneInput(el){
+  return () => {
+    const digits = el.value.replace(/\D/g,'').slice(0,10);
+    el.value = (digits.match(/.{1,2}/g) || []).join(' ');
+  };
+}
+
+function triggerUpload(id){ document.getElementById(id).click(); }
+function handleUpload(inputEl, boxId, textId){
+  if(inputEl.files && inputEl.files[0]){
+    document.getElementById(boxId).classList.add('filled');
+    document.getElementById(textId).textContent = '✓ ' + inputEl.files[0].name;
+  }
+}
+function removeUpload(e, inputId, boxId, textId, defaultText){
+  e.stopPropagation();
+  document.getElementById(inputId).value = '';
+  document.getElementById(boxId).classList.remove('filled');
+  document.getElementById(textId).textContent = defaultText;
+}
+
+let toastTimer;
+function settingsToast(msg){
+  document.getElementById('toastMsg').textContent = msg;
+  const t = document.getElementById('toast');
+  t.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(()=>t.classList.remove('show'), 2200);
+}
+function saveSettings(){
+  document.getElementById('homeCompanyName').textContent = document.getElementById('setCompanyName').value || 'Mon entreprise';
+  settingsToast('Modifications enregistrées');
+}
+
+/* ===================== Données partagées ===================== */
+let employees = [
+  { nom:'Kouassi', prenom:'Awa', email:'awa.kouassi@entreprise.com', momo:'01 97 12 34 56', whatsapp:'01 97 12 34 56', base:125000, cnss:true, commission:0, primes:0, transport:0, autres:0, retenues:0 },
+  { nom:'Dossou', prenom:'Fabrice', email:'f.dossou@entreprise.com', momo:'01 96 22 11 09', whatsapp:'01 96 22 11 09', base:98000, cnss:false, commission:0, primes:0, transport:0, autres:0, retenues:0 },
+  { nom:'Adjovi', prenom:'Nadège', email:'n.adjovi@entreprise.com', momo:'01 91 45 67 12', whatsapp:'01 40 12 09 88', base:143500, cnss:true, commission:0, primes:0, transport:0, autres:0, retenues:0 }
+];
+
+/* ===================== Onboarding ===================== */
+let timerInterval;
+document.getElementById('phone').addEventListener('input', formatPhoneInput(document.getElementById('phone')));
+document.getElementById('companyWhatsapp').addEventListener('input', formatPhoneInput(document.getElementById('companyWhatsapp')));
+
+function obGoToStep(n){
+  document.querySelectorAll('#onboardingFlow .screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('obScreen'+n).classList.add('active');
+  obUpdateProgress(n);
+  const heads = {
+    1: ['Étape 1 sur 3', 'Créer votre compte', "Renseignez vos informations pour commencer à payer vos équipes en un seul dépôt."],
+    2: ['Étape 1 sur 3', 'Vérifiez votre email', "Entrez le code à 6 chiffres reçu par email."],
+    3: ['Étape 2 sur 3', "Parlez-nous de votre entreprise", "Ces informations apparaîtront sur les bulletins de paie envoyés à vos employés."],
+    4: ['Étape 3 sur 3', 'Bienvenue sur KoyaPay', ""]
+  };
+  const [label, title, sub] = heads[n];
+  document.getElementById('obStepLabel').textContent = label;
+  document.getElementById('obStepTitle').textContent = title;
+  document.getElementById('obStepSub').textContent = sub;
+  if(n === 2){
+    const email = document.getElementById('email').value || 'votre adresse email';
+    document.getElementById('otpPhoneDisplay').textContent = email;
+    otpSentAt = Date.now();
+    otpForceExpired = false;
+    otpSmsFailed = false;
+    otpAttempts = 0;
+    obStartTimer();
+  }
+}
+function obUpdateProgress(n){
+  const fills = { 1:[0,0,0], 2:[100,0,0], 3:[100,100,0], 4:[100,100,100] };
+  const [a,b,c] = fills[n] || [0,0,0];
+  document.getElementById('obP1').style.width = a+'%';
+  document.getElementById('obP2').style.width = b+'%';
+  document.getElementById('obP3').style.width = c+'%';
+}
+function obGoToStep2(){
+  const phone = document.getElementById('phone').value.trim();
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value;
+  let ok = true;
+  if(phone.replace(/\D/g,'').length < 10){ showError('phone', true); ok = false; } else showError('phone', false);
+  if(!/^\S+@\S+\.\S+$/.test(email)){ showError('email', true); ok = false; } else showError('email', false);
+  if(password.length < 8 || !/[A-Z]/.test(password) || !/[0-9]/.test(password) || !/[^A-Za-z0-9]/.test(password)){ showError('password', true); ok = false; } else showError('password', false);
+  if(ok) obGoToStep(2);
+}
+document.querySelectorAll('.otp-digit').forEach((el, i, arr) => {
+  el.addEventListener('input', () => {
+    el.value = el.value.replace(/\D/g,'');
+    if(el.value && i < arr.length - 1) arr[i+1].focus();
+    showError('otp', false);
+  });
+  el.addEventListener('keydown', (e) => { if(e.key === 'Backspace' && !el.value && i > 0) arr[i-1].focus(); });
+});
+
+let otpAttempts = 0;
+const otpMaxAttempts = 5;
+let otpLocked = false;
+let otpLockInterval = null;
+let otpSentAt = 0;
+let otpForceExpired = false;
+let otpSmsFailed = false;
+const OTP_VALIDITY_MS = 10*60*1000;
+
+function otpShowError(msg){
+  const el = document.getElementById('err-otp');
+  el.textContent = msg;
+  el.style.display = 'block';
+}
+
+function obSimulate(kind){
+  if(kind === 'expired'){ otpForceExpired = true; otpShowError('Ce code a expiré. Demandez-en un nouveau code.'); }
+  if(kind === 'sms'){
+    otpSmsFailed = true;
+    otpShowError("Échec d'envoi de l'email. Vérifiez l'adresse ou réessayez dans quelques instants.");
+  }
+}
+
+function obGoToStep3(){
+  if(otpLocked) return;
+  if(otpSmsFailed){ otpShowError("Échec d'envoi de l'email. Vérifiez l'adresse ou réessayez dans quelques instants."); return; }
+  const digits = Array.from(document.querySelectorAll('.otp-digit')).map(i => i.value).join('');
+  if(digits.length !== 6){ otpShowError('Entrez les 6 chiffres du code.'); return; }
+  if(otpForceExpired || (otpSentAt && Date.now() - otpSentAt > OTP_VALIDITY_MS)){
+    otpShowError('Ce code a expiré. Demandez-en un nouveau code.');
+    return;
+  }
+  if(digits !== '123456'){
+    otpAttempts++;
+    const remaining = otpMaxAttempts - otpAttempts;
+    if(remaining <= 0){ obLockOtp(); return; }
+    otpShowError(`Code incorrect. Il vous reste ${remaining} tentative(s) avant blocage.`);
+    return;
+  }
+  clearInterval(timerInterval);
+  clearInterval(otpLockInterval);
+  obGoToStep(3);
+}
+
+function obLockOtp(){
+  otpLocked = true;
+  showError('otp', false);
+  document.getElementById('otpLockMsg').style.display = 'flex';
+  document.querySelectorAll('.otp-digit').forEach(i=>i.disabled=true);
+  document.getElementById('otpVerifyBtn').disabled = true;
+  document.getElementById('resendBtn').style.display = 'none';
+  document.getElementById('resendTimer').style.display = 'none';
+  let s = 15*60;
+  const label = () => { const m=Math.floor(s/60), sec=s%60; document.getElementById('otpLockTimer').textContent = `${m}:${sec.toString().padStart(2,'0')}`; };
+  label();
+  otpLockInterval = setInterval(() => {
+    s--;
+    if(s <= 0){ clearInterval(otpLockInterval); obUnlockOtp(); } else label();
+  }, 1000);
+}
+function obUnlockOtp(){
+  otpLocked = false; otpAttempts = 0;
+  document.getElementById('otpLockMsg').style.display = 'none';
+  document.querySelectorAll('.otp-digit').forEach(i=>{ i.disabled=false; i.value=''; });
+  document.getElementById('otpVerifyBtn').disabled = false;
+  obStartTimer();
+}
+function obResendCode(){
+  otpForceExpired = false;
+  otpSmsFailed = false;
+  otpSentAt = Date.now();
+  document.querySelectorAll('.otp-digit').forEach(i=>i.value='');
+  showError('otp', false);
+  obStartTimer();
+}
+function obStartTimer(){
+  clearInterval(timerInterval);
+  let s = 60;
+  document.getElementById('resendBtn').style.display = 'none';
+  document.getElementById('resendTimer').style.display = 'inline';
+  document.getElementById('resendTimer').textContent = 'Renvoyer le code dans '+s+'s';
+  timerInterval = setInterval(() => {
+    s--;
+    if(s <= 0){ clearInterval(timerInterval); document.getElementById('resendTimer').style.display = 'none'; document.getElementById('resendBtn').style.display = 'inline'; }
+    else document.getElementById('resendTimer').textContent = 'Renvoyer le code dans '+s+'s';
+  }, 1000);
+}
+function toggleSameWhatsapp(){
+  const checked = document.getElementById('sameAsPhone').checked;
+  const wa = document.getElementById('companyWhatsapp');
+  if(checked){ wa.value = document.getElementById('phone').value; wa.readOnly = true; wa.style.background = 'var(--paper-2)'; showError('whatsapp', false); }
+  else { wa.readOnly = false; wa.value = ''; wa.style.background = '#fff'; wa.focus(); }
+}
+function obGoToStep4(){
+  const name = document.getElementById('companyName').value.trim();
+  const wa = document.getElementById('companyWhatsapp').value.trim();
+  let ok = true;
+  if(!name){ showError('companyName', true); ok = false; } else showError('companyName', false);
+  if(wa.replace(/\D/g,'').length < 10){ showError('whatsapp', true); ok = false; } else showError('whatsapp', false);
+  if(!ok) return;
+  document.getElementById('sumCompany').textContent = name;
+  const ind = document.getElementById('indicatif').value;
+  document.getElementById('sumPhone').textContent = ind + ' ' + (document.getElementById('phone').value || '—');
+  document.getElementById('sumEmail').textContent = document.getElementById('email').value || '—';
+  document.getElementById('sumWhatsapp').textContent = ind + ' ' + document.getElementById('companyWhatsapp').value;
+  document.getElementById('homeCompanyName').textContent = name;
+  document.getElementById('setCompanyName').value = name;
+  obGoToStep(4);
+}
+function enterApp(){
+  document.getElementById('onboardingFlow').style.display = 'none';
+  const lf = document.getElementById('loginFlow');
+  if(lf){ lf.style.display = 'none'; lf.classList.remove('active'); }
+  document.getElementById('mainApp').style.display = 'flex';
+  switchView('home');
+}
+
+/* ===================== Vue : Employés ===================== */
+let editingIndex = null;
+
+function empNetOf(e){ return e.base; }
+
+function renderList(list){
+  const wrap = document.getElementById('empList');
+  const empty = document.getElementById('emptyState');
+  wrap.innerHTML = '';
+  if(list.length === 0){ empty.style.display = 'block'; updateStats(); return; }
+  empty.style.display = 'none';
+  list.forEach((e) => {
+    const realIndex = employees.indexOf(e);
+    const card = document.createElement('div');
+    card.className = 'emp-card';
+    card.innerHTML = `
+      <div class="emp-head">
+        <div class="emp-avatar">${initials(e.prenom, e.nom)}</div>
+        <div class="emp-info">
+          <div class="emp-name">${e.prenom} ${e.nom}</div>
+          <div class="emp-sub"><i class="fa-solid fa-mobile-screen-button" style="font-size:10px;"></i>+229 ${e.momo}</div>
+          <div class="emp-net">${fmt(e.base)}</div>
+          ${e.cnss ? '<span class="cnss-badge"><i class="fa-solid fa-shield-halved"></i>CNSS</span>' : ''}
+        </div>
+        <div class="emp-actions">
+          <button class="icon-btn" onclick="editEmployee(${realIndex})"><i class="fa-solid fa-pen"></i></button>
+          <button class="icon-btn danger" onclick="removeEmployee(${realIndex})"><i class="fa-solid fa-trash"></i></button>
+        </div>
+      </div>`;
+    wrap.appendChild(card);
+  });
+  updateStats();
+}
+function updateStats(){
+  document.getElementById('statCount').textContent = employees.length;
+  document.getElementById('statTotal').textContent = employees.reduce((s,e)=>s+e.base,0).toLocaleString('fr-FR');
+  document.getElementById('statCnss').textContent = employees.filter(e=>e.cnss).length;
+  document.getElementById('homeStatEmp').textContent = employees.length;
+  document.getElementById('homeStatMass').textContent = employees.reduce((s,e)=>s+e.base,0).toLocaleString('fr-FR');
+}
+let confirmCallback = null;
+function askConfirm(title, text, onYes){
+  document.getElementById('confirmTitle').textContent = title;
+  document.getElementById('confirmText').textContent = text;
+  confirmCallback = onYes;
+  document.getElementById('confirmOverlay').classList.add('open');
+}
+function closeConfirm(){
+  document.getElementById('confirmOverlay').classList.remove('open');
+  confirmCallback = null;
+}
+function confirmYes(){
+  const cb = confirmCallback;
+  closeConfirm();
+  if(cb) cb();
+}
+
+function removeEmployee(i){
+  const e = employees[i];
+  askConfirm(
+    'Supprimer cet employé ?',
+    `${e.prenom} ${e.nom} sera retiré de votre liste. Cette action est définitive.`,
+    () => { employees.splice(i,1); renderList(employees); }
+  );
+}
+function filterList(q){
+  q = q.trim().toLowerCase();
+  renderList(!q ? employees : employees.filter(e => (e.prenom+' '+e.nom).toLowerCase().includes(q)));
+}
+document.getElementById('empMomo').addEventListener('input', formatPhoneInput(document.getElementById('empMomo')));
+document.getElementById('empWhatsapp').addEventListener('input', formatPhoneInput(document.getElementById('empWhatsapp')));
+function toggleEmpSameNumber(){
+  const checked = document.getElementById('empSameNumber').checked;
+  const wa = document.getElementById('empWhatsapp');
+  if(checked){ wa.value = document.getElementById('empMomo').value; wa.readOnly = true; wa.style.background = 'var(--paper-2)'; }
+  else { wa.readOnly = false; wa.value = ''; wa.style.background = '#fff'; }
+}
+function resetForm(){
+  ['empNom','empPrenom','empEmail','empMomo','empWhatsapp','empBase'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('empCnss').checked = false;
+  document.getElementById('empSameNumber').checked = false;
+  document.getElementById('empWhatsapp').readOnly = false;
+  document.getElementById('empWhatsapp').style.background = '#fff';
+  ['empNom','empPrenom','empMomo'].forEach(id => document.getElementById('err-'+id).style.display='none');
+}
+function openAdd(){
+  editingIndex = null; resetForm();
+  document.getElementById('modalTitleText').textContent = 'Ajouter un employé';
+  document.getElementById('saveBtnLabel').textContent = "Ajouter l'employé";
+  document.getElementById('addOverlay').classList.add('open');
+}
+function editEmployee(i){
+  editingIndex = i; const e = employees[i]; resetForm();
+  document.getElementById('empNom').value = e.nom;
+  document.getElementById('empPrenom').value = e.prenom;
+  document.getElementById('empEmail').value = e.email;
+  document.getElementById('empMomo').value = e.momo;
+  document.getElementById('empWhatsapp').value = e.whatsapp;
+  document.getElementById('empBase').value = e.base;
+  document.getElementById('empCnss').checked = e.cnss;
+  document.getElementById('modalTitleText').textContent = "Modifier l'employé";
+  document.getElementById('saveBtnLabel').textContent = 'Enregistrer les modifications';
+  document.getElementById('addOverlay').classList.add('open');
+}
+function closeAdd(){ document.getElementById('addOverlay').classList.remove('open'); editingIndex = null; }
+function saveEmployee(){
+  const nom = document.getElementById('empNom').value.trim();
+  const prenom = document.getElementById('empPrenom').value.trim();
+  const momo = document.getElementById('empMomo').value.trim();
+  let ok = true;
+  if(!nom){ document.getElementById('err-empNom').style.display='block'; ok=false; } else document.getElementById('err-empNom').style.display='none';
+  if(!prenom){ document.getElementById('err-empPrenom').style.display='block'; ok=false; } else document.getElementById('err-empPrenom').style.display='none';
+  if(momo.replace(/\D/g,'').length !== 10){ document.getElementById('err-empMomo').style.display='block'; ok=false; } else document.getElementById('err-empMomo').style.display='none';
+  if(!ok) return;
+  const base = { nom, prenom, email: document.getElementById('empEmail').value.trim(), momo,
+    whatsapp: document.getElementById('empWhatsapp').value.trim() || momo,
+    base: parseFloat(document.getElementById('empBase').value) || 0,
+    cnss: document.getElementById('empCnss').checked };
+  if(editingIndex !== null){ employees[editingIndex] = { ...employees[editingIndex], ...base }; }
+  else { employees.push({ ...base, commission:0, primes:0, transport:0, autres:0, retenues:0 }); }
+  renderList(employees);
+  closeAdd();
+}
+function openImport(){ document.getElementById('importOverlay').classList.add('open'); }
+function closeImport(){
+  document.getElementById('importOverlay').classList.remove('open');
+  document.getElementById('importSummary').classList.remove('show');
+  document.getElementById('importConfirmBtn').style.display = 'none';
+  document.getElementById('excelFile').value = '';
+  document.getElementById('err-import').style.display = 'none';
+  pendingImport = [];
+}
+let pendingImport = [];
+let lastImportErrors = [];
+function handleExcelImport(input){
+  if(!input.files || !input.files[0]) return;
+  const file = input.files[0];
+  const errEl = document.getElementById('err-import');
+  errEl.style.display = 'none';
+  const validExt = /\.(xlsx|xls)$/i.test(file.name);
+  if(!validExt){
+    errEl.textContent = 'Format de fichier non pris en charge. Utilisez un fichier .xlsx ou .xls.';
+    errEl.style.display = 'block';
+    document.getElementById('importSummary').classList.remove('show');
+    input.value = '';
+    return;
+  }
+  pendingImport = [
+    { nom:'Houngbo', prenom:'Sèdjro', email:'', momo:'01 95 33 20 14', whatsapp:'01 95 33 20 14', base:110000, cnss:true, commission:0, primes:0, transport:0, autres:0, retenues:0 },
+    { nom:'Yai', prenom:'Chantal', email:'', momo:'01 90 08 77 41', whatsapp:'01 90 08 77 41', base:132000, cnss:false, commission:0, primes:0, transport:0, autres:0, retenues:0 }
+  ];
+  lastImportErrors = [ { line:5, reason:'Numéro Mobile Money manquant' }, { line:9, reason:'Salaire invalide' } ];
+  document.getElementById('importOkCount').textContent = pendingImport.length;
+  document.getElementById('importKoCount').textContent = lastImportErrors.length;
+  document.getElementById('importErrorsList').innerHTML = lastImportErrors.map(e => `<div class="import-error-row"><span>Ligne ${e.line}</span><span>${e.reason}</span></div>`).join('');
+  document.getElementById('importSummary').classList.add('show');
+  document.getElementById('importConfirmBtn').style.display = 'inline-flex';
+}
+function downloadImportReport(){
+  const lines = ['Ligne;Raison', ...lastImportErrors.map(e => `${e.line};${e.reason}`)];
+  const blob = new Blob([lines.join('\n')], { type:'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url; a.download = 'rapport-import-koyapay.csv';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
+  URL.revokeObjectURL(url);
+}
+function confirmImport(){ pendingImport.forEach(p => employees.push(p)); renderList(employees); closeImport(); }
+
+/* ===================== Vue : Paie ===================== */
+let selectedMethod = 'MTN MoMo';
+function payNetOf(e){ return Math.max(e.base+e.commission+e.primes+e.transport+e.autres-e.retenues, 0); }
+function renderPayroll(){
+  const wrap = document.getElementById('payEmpList');
+  wrap.innerHTML = '';
+  employees.forEach((e,i) => {
+    const card = document.createElement('div');
+    card.className = 'emp-card';
+    card.innerHTML = `
+      <div class="emp-head click" onclick="this.parentElement.classList.toggle('open')">
+        <div class="emp-avatar">${initials(e.prenom,e.nom)}</div>
+        <div><div class="emp-name">${e.prenom} ${e.nom}</div><div class="emp-sub">Base ${fmt(e.base)}</div></div>
+        <div class="emp-net-col"><div class="n" id="paynet-${i}">${fmt(payNetOf(e))}</div><div class="l">net ce mois</div></div>
+        <i class="fa-solid fa-chevron-down chev"></i>
+      </div>
+      <div class="emp-detail">
+        <div class="var-grid">
+          <div class="var-field"><label>Commission</label><input type="number" min="0" value="${e.commission}" oninput="payUpdateVar(${i},'commission',this.value)"></div>
+          <div class="var-field"><label>Primes</label><input type="number" min="0" value="${e.primes}" oninput="payUpdateVar(${i},'primes',this.value)"></div>
+          <div class="var-field"><label>Transport</label><input type="number" min="0" value="${e.transport}" oninput="payUpdateVar(${i},'transport',this.value)"></div>
+          <div class="var-field"><label>Autres</label><input type="number" min="0" value="${e.autres}" oninput="payUpdateVar(${i},'autres',this.value)"></div>
+          <div class="var-field" style="grid-column:1/-1;"><label>Retenues</label><input type="number" min="0" value="${e.retenues}" oninput="payUpdateVar(${i},'retenues',this.value)"></div>
+        </div>
+      </div>`;
+    wrap.appendChild(card);
+  });
+  payUpdateGrandTotal();
+}
+function payUpdateVar(i, key, val){
+  employees[i][key] = parseFloat(val) || 0;
+  document.getElementById('paynet-'+i).textContent = fmt(payNetOf(employees[i]));
+  payUpdateGrandTotal();
+}
+function payUpdateGrandTotal(){
+  const total = employees.reduce((s,e)=>s+payNetOf(e),0);
+  document.getElementById('grandTotal').textContent = fmt(total);
+  return total;
+}
+function computeFees(totalNet, count){
+  if(totalNet <= 500000) return totalNet * 0.007;
+  if(totalNet <= 1000000) return totalNet * 0.005 + 50*count;
+  return totalNet * 0.004 + 50*count;
+}
+function payGoToStep(n){
+  document.querySelectorAll('#viewPayroll .screen').forEach(s=>s.classList.remove('active'));
+  document.getElementById('payScreen'+n).classList.add('active');
+  const heads = {
+    1: ['Étape 1 sur 4','Préparez la paie',"Ajustez les primes, transport ou retenues de chaque employé pour ce mois."],
+    2: ['Étape 2 sur 4','Choisissez la date',"À quelle date vos employés doivent-ils être payés ?"],
+    3: ['Étape 3 sur 4','Récapitulatif & dépôt',"Vérifiez le montant total et choisissez votre moyen de dépôt."],
+    4: ['Étape 4 sur 4','Confirmation',""]
+  };
+  const [l,t,s] = heads[n];
+  document.getElementById('payStepLabel').textContent = l;
+  document.getElementById('payStepTitle').textContent = t;
+  document.getElementById('payStepSub').textContent = s;
+  const fills = {1:[0,0,0,0],2:[100,0,0,0],3:[100,100,0,0],4:[100,100,100,100]};
+  const f = fills[n];
+  ['payP1','payP2','payP3','payP4'].forEach((id,idx)=>document.getElementById(id).style.width = f[idx]+'%');
+}
+function payGoToStep3(){
+  const date = document.getElementById('payDate').value;
+  document.getElementById('sumDate').textContent = date ? new Date(date+'T00:00:00').toLocaleDateString('fr-FR',{day:'numeric',month:'long',year:'numeric'}) : 'Non choisie';
+  const total = payUpdateGrandTotal();
+  const fees = computeFees(total, employees.length);
+  document.getElementById('sumEmpCount').textContent = employees.length;
+  document.getElementById('sumNet').textContent = fmt(total);
+  document.getElementById('sumFees').textContent = fmt(fees);
+  document.getElementById('sumTotal').textContent = fmt(total+fees);
+  payGoToStep(3);
+}
+function selectMethod(el){
+  document.querySelectorAll('.method-card').forEach(c=>c.classList.remove('selected'));
+  el.classList.add('selected');
+  selectedMethod = el.dataset.m;
+}
+function payGoToStep4(){
+  document.getElementById('confirmSub').textContent = `Dépôt via ${selectedMethod} confirmé. Vos employés seront payés le ${document.getElementById('sumDate').textContent} et recevront leur bulletin sur WhatsApp.`;
+  payGoToStep(4);
+}
+
+const depositErrorMessages = {
+  balance: "Solde insuffisant pour couvrir ce dépôt. Complétez votre solde et réessayez.",
+  timeout: "Le délai de traitement a été dépassé. Vérifiez votre connexion et réessayez.",
+  operator: "L'opérateur Mobile Money a rejeté la transaction. Réessayez dans quelques instants.",
+  invalid: "Le numéro Mobile Money renseigné est invalide. Vérifiez-le avant de réessayer.",
+  blocked: "Ce compte Mobile Money est bloqué. Contactez votre opérateur ou choisissez une autre méthode.",
+  ceiling: "Le plafond de transaction de votre compte Mobile Money est atteint pour aujourd'hui."
+};
+let depositInProgress = false;
+
+function payDeposit(){
+  if(depositInProgress) return; // protection contre le double paiement
+  const errEl = document.getElementById('err-deposit');
+  errEl.style.display = 'none';
+  const scenario = document.getElementById('depositScenario').value;
+  const btn = document.getElementById('depositBtn');
+
+  depositInProgress = true;
+  btn.disabled = true;
+  const originalLabel = btn.textContent;
+  btn.textContent = 'Traitement en cours…';
+
+  setTimeout(() => {
+    depositInProgress = false;
+    btn.disabled = false;
+    btn.textContent = originalLabel;
+    if(scenario !== 'ok'){
+      errEl.textContent = depositErrorMessages[scenario];
+      errEl.style.display = 'block';
+      return;
+    }
+    payGoToStep4();
+  }, 900);
+}
+const payDateInput = document.getElementById('payDate');
+const dInit = new Date(); dInit.setDate(dInit.getDate()+5);
+payDateInput.value = dInit.toISOString().slice(0,10);
+
+/* ===================== Vue : Suivi / historique ===================== */
+const trackStatusMap = ['ok','pending','fail'];
+const trackLabels = { ok:['Payé','fa-circle-check'], pending:['En attente','fa-clock'], fail:['Échec','fa-triangle-exclamation'] };
+const MAX_RETRIES = 3;
+function renderTracking(){
+  const wrap = document.getElementById('trackPayList');
+  wrap.innerHTML = '';
+  employees.forEach((e,i) => {
+    const status = trackStatusMap[i] || 'pending';
+    e._status = e._status || status;
+    e._retries = e._retries || 0;
+    if(e._bulletinFailed === undefined) e._bulletinFailed = (i === 0);
+    const [label, icon] = trackLabels[e._status];
+
+    let actionHtml = '';
+    if(e._status === 'fail'){
+      if(e._retries >= MAX_RETRIES){
+        actionHtml = `<p style="font-size:10.5px; color:var(--danger); margin:6px 0 0; line-height:1.4;">Nombre maximal de relances atteint (${MAX_RETRIES}). Les fonds seront remis à votre solde après 7 jours sans action.</p>`;
+      } else {
+        actionHtml = `<button class="retry-btn" onclick="trackRetry(${i})"><i class="fa-solid fa-rotate-right"></i> Relancer (${e._retries}/${MAX_RETRIES})</button>`;
+      }
+    } else if(e._status === 'ok' && e._bulletinFailed){
+      actionHtml = `<p style="font-size:10.5px; color:var(--amber); margin:4px 0 0;"><i class="fa-solid fa-triangle-exclamation"></i> Bulletin WhatsApp non envoyé — erreur signalée</p>`;
+    }
+
+    const card = document.createElement('div');
+    card.className = 'pay-card';
+    card.innerHTML = `
+      <div class="emp-avatar">${initials(e.prenom,e.nom)}</div>
+      <div style="flex:1;">
+        <div class="emp-name">${e.prenom} ${e.nom}</div>
+        <div class="emp-sub">${fmt(payNetOf(e))}</div>
+        ${actionHtml}
+      </div>
+      <span class="status-badge ${e._status}"><i class="fa-solid ${icon}"></i>${label}</span>`;
+    wrap.appendChild(card);
+  });
+  document.getElementById('cOk').textContent = employees.filter(e=>e._status==='ok').length;
+  document.getElementById('cPending').textContent = employees.filter(e=>e._status==='pending').length;
+  document.getElementById('cFail').textContent = employees.filter(e=>e._status==='fail').length;
+
+  const bWrap = document.getElementById('bulletinList');
+  bWrap.innerHTML = employees.map(e => `<div class="bulletin-row"><i class="fa-brands fa-whatsapp" style="${e._bulletinFailed ? 'color:var(--danger);' : ''}"></i><span class="n">${e.prenom} ${e.nom}${e._bulletinFailed ? ' <span style=\"color:var(--danger); font-weight:600;\">(non envoyé)</span>' : ''}</span><button onclick="return false;">${e._bulletinFailed ? 'Renvoyer' : 'Voir'}</button></div>`).join('');
+}
+function trackRetry(i){
+  const e = employees[i];
+  if(e._retries >= MAX_RETRIES) return;
+  e._retries++;
+  e._status = 'pending';
+  renderTracking();
+  setTimeout(() => {
+    // Pour la démo : la dernière relance possible réussit toujours
+    e._status = (e._retries >= MAX_RETRIES) ? 'ok' : 'fail';
+    renderTracking();
+  }, 1400);
+}
+function showPane(name, btn){
+  document.querySelectorAll('.pane').forEach(p=>p.classList.remove('active'));
+  document.getElementById('pane-'+name).classList.add('active');
+  document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+/* ===================== Navigation principale ===================== */
+function switchView(name){
+  document.querySelectorAll('.view').forEach(v => v.style.display = 'none');
+  document.getElementById('view'+name.charAt(0).toUpperCase()+name.slice(1)).style.display = 'block';
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  const btn = document.querySelector('.nav-btn[data-view="'+name+'"]');
+  if(btn) btn.classList.add('active');
+  if(name === 'employees') renderList(employees);
+  if(name === 'payroll') renderPayroll();
+  if(name === 'tracking') renderTracking();
+}
+function selectNav(btn){ switchView(btn.dataset.view); }
+
+function openEmployeeView(){ document.getElementById('employeeOverlay').classList.add('open'); }
+function closeEmployeeView(){ document.getElementById('employeeOverlay').classList.remove('open'); }
+function showEmpPane(name, btn){
+  document.querySelectorAll('#employeeOverlay .emp-pane').forEach(p=>p.classList.remove('active'));
+  document.getElementById('pane'+name).classList.add('active');
+  document.querySelectorAll('#employeeOverlay .tab-btn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+}
+
+renderList(employees);
+
+/* ===== Login / Onboarding switch ===== */
+function showLogin(){
+  document.getElementById('onboardingFlow').style.display = 'none';
+  const lf = document.getElementById('loginFlow');
+  lf.style.display = 'flex';
+  lf.classList.add('active');
+  document.querySelectorAll('#onboardingFlow .screen').forEach(s => s.classList.remove('active'));
+}
+function showOnboarding(){
+  document.getElementById('loginFlow').style.display = 'none';
+  document.getElementById('loginFlow').classList.remove('active');
+  document.getElementById('onboardingFlow').style.display = 'block';
+  // ensure step 1 visible
+  document.querySelectorAll('#onboardingFlow .screen').forEach(s => s.classList.remove('active'));
+  const s1 = document.getElementById('obScreen1');
+  if(s1) s1.classList.add('active');
+}
+function doLogin(){
+  const email = (document.getElementById('loginEmail').value || '').trim();
+  const pass = document.getElementById('loginPassword').value || '';
+  let ok = true;
+  const errE = document.getElementById('err-loginEmail');
+  const errP = document.getElementById('err-loginPassword');
+  if(!email || !email.includes('@')){ errE.style.display='block'; ok=false; } else errE.style.display='none';
+  if(pass.length < 4){ errP.style.display='block'; ok=false; } else errP.style.display='none';
+  if(!ok) return;
+  // Connexion réussie → application
+  document.getElementById('loginFlow').style.display = 'none';
+  document.getElementById('loginFlow').classList.remove('active');
+  document.getElementById('onboardingFlow').style.display = 'none';
+  const main = document.getElementById('mainApp');
+  if(main){ main.style.display = 'flex'; }
+  if(typeof switchView === 'function') switchView('home');
+  else if(typeof switchView === 'function') switchView('employees');
+}
+
+</script>
+
+</body>
+</html>
