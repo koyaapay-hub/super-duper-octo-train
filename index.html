@@ -4,10 +4,10 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>KoyaPay — Paie. Simple. Sécurisée. | Bénin</title>
-<meta name="description" content="Un seul dépôt et tous vos employés sont payés le même jour sur Mobile Money. Bulletins de paie envoyés automatiquement sur WhatsApp. MTN, Moov, Celtiis.">
+<meta name="description" content="Un seul dépôt et tous vos employés sont payés le même jour sur Mobile Money. Bulletins de paie envoyés automatiquement par e-mail. MTN, Moov, Celtiis.">
 <meta name="theme-color" content="#0F1B2D">
 <meta property="og:title" content="KoyaPay — Paie. Simple. Sécurisée.">
-<meta property="og:description" content="Un seul dépôt et tous vos employés sont payés le même jour. Bulletin envoyé automatiquement sur WhatsApp.">
+<meta property="og:description" content="Un seul dépôt et tous vos employés sont payés le même jour. Bulletin envoyé automatiquement par e-mail.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Sora:wght@500;600;700;800&display=swap" rel="stylesheet">
@@ -163,7 +163,7 @@
   .vision-globe{width:120px;height:120px;margin:0 auto 28px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#5eead4,#0f766e 45%,#0f1b2d 100%);box-shadow:0 12px 40px rgba(15,27,45,0.18),inset -8px -8px 20px rgba(0,0,0,0.25);position:relative;}
   .vision-globe::after{content:"";position:absolute;inset:18%;border:1.5px solid rgba(255,255,255,0.25);border-radius:50%;border-left-color:transparent;border-bottom-color:transparent;}
   .vision-globe::before{content:"";position:absolute;left:50%;top:8%;bottom:8%;width:1.5px;background:rgba(255,255,255,0.2);transform:translateX(-50%);}
-  .vision p.v-block{font-size:15.5px;line-height:1.75;color:var(--ink);text-align:justify;text-align-last:center;margin:0 auto 18px;max-width:640px;opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
+  .vision p.v-block{font-size:15.5px;line-height:1.75;color:var(--ink);text-align:justify;text-align-last:center;margin:0 auto 18px;max-width:640px;opacity:1;transform:none;transition:opacity .7s ease,transform .7s ease;}
   .vision p.v-block.on{opacity:1;transform:none;}
   .vision-banner{margin:36px auto;padding:36px 28px;border-radius:20px;background:linear-gradient(145deg,var(--navy),#1a3a2e);color:#fff;max-width:640px;}
   .vision-banner h3{font-family:Sora,sans-serif;font-size:22px;line-height:1.35;font-weight:700;text-align:center;margin:0;}
@@ -213,7 +213,7 @@
       <div>
         <div class="hero-eyebrow"><i class="fa-solid fa-bolt"></i> Paie. Simple. Sécurisée.</div>
         <h1>Un seul dépôt.<br>Tous vos employés <span>payés le même jour</span>.</h1>
-        <p class="lead">KoyaPay simplifie radicalement le paiement des salaires : déposez une seule fois la masse salariale, et chaque employé reçoit son argent sur Mobile Money — avec son bulletin de paie envoyé automatiquement sur WhatsApp.</p>
+        <p class="lead">KoyaPay simplifie radicalement le paiement des salaires : déposez une seule fois la masse salariale, et chaque employé reçoit son argent sur Mobile Money — avec son bulletin de paie envoyé automatiquement par e-mail.</p>
         <div class="hero-actions">
           <a href="https://koyapayapp.vercel.app/register" class="btn btn-primary">Créer mon compte gratuitement</a>
           <a href="#comment" class="btn btn-outline"><i class="fa-solid fa-play"></i> Voir comment ça marche</a>
@@ -312,10 +312,10 @@
     <div class="reveal">
       <p class="eyebrow">Pour l'employé</p>
       <h2 class="section-title">Rien à installer, rien à apprendre</h2>
-      <p class="section-sub">L'employé reçoit simplement son argent et son bulletin, là où il est déjà : Mobile Money et WhatsApp.</p>
+      <p class="section-sub">L'employé reçoit simplement son argent et son bulletin, là où il est déjà : MTN Mobile Money et e-mail.</p>
       <div class="emp-points">
-        <div class="emp-point"><i class="fa-solid fa-money-bill-transfer"></i><div><b>Salaire direct sur Mobile Money</b><span>MTN, Moov ou Celtiis — sans délai ni étape supplémentaire.</span></div></div>
-        <div class="emp-point"><i class="fa-brands fa-whatsapp"></i><div><b>Bulletin envoyé sur WhatsApp</b><span>Document signé et cacheté, prêt à conserver ou imprimer.</span></div></div>
+        <div class="emp-point"><i class="fa-solid fa-money-bill-transfer"></i><div><b>Salaire direct sur Mobile Money</b><span>MTN Mobile Money — sans délai ni étape supplémentaire.</span></div></div>
+        <div class="emp-point"><i class="fa-brands fa-whatsapp"></i><div><b>Bulletin envoyé par e-mail</b><span>Document signé et cacheté, prêt à conserver ou imprimer.</span></div></div>
         <div class="emp-point"><i class="fa-solid fa-ban"></i><div><b>Aucune application</b><span>Aucun compte à créer, aucun mot de passe à retenir.</span></div></div>
       </div>
     </div>
@@ -346,3 +346,91 @@
     <p style="font-size:12.5px;color:var(--ink-soft);max-width:520px;margin:18px auto 0;line-height:1.55;">KoyaPay ne prend pas en charge les frais opérateur Mobile Money. Ils restent à la charge de l’entreprise, selon le réseau.</p>
   </div>
 </section>
+
+<section class="cta-band" id="cta">
+  <div class="wrap">
+    <h2>Prêt à simplifier la paie de votre équipe ?</h2>
+    <p>Créez votre compte en quelques minutes. Un seul dépôt, tous vos employés payés le même jour via MTN MoMo.</p>
+    <div class="cta-actions">
+      <a href="https://koyapayapp.vercel.app/register" class="btn btn-primary">Créer mon compte</a>
+      <a href="#" class="btn btn-outline" onclick="openModal(event)">Parler à l’équipe</a>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap">
+    <div style="text-align:center;margin-bottom:18px;">
+      <div class="nav-brand" style="justify-content:center;display:inline-flex;color:#fff;">
+        <span style="font-weight:800;color:var(--green);">KoyaPay</span>
+      </div>
+      <p style="max-width:420px;margin:10px auto 0;text-align:center;">Paie. Simple. Sécurisée. Un seul dépôt et tous vos employés sont payés le même jour.</p>
+    </div>
+    <div class="foot-row">
+      <span>© 2026 KoyaPay — Bénin</span>
+      <div class="foot-links">
+        <a href="#comment">Comment ça marche</a>
+        <a href="#fonctionnalites">Fonctionnalités</a>
+        <a href="#tarifs">Tarifs</a>
+        <a href="https://koyapayapp.vercel.app/cgu">CGU</a>
+        <a href="https://koyapayapp.vercel.app/confidentialite">Confidentialité</a>
+        <a href="#" onclick="openModal(event)">Contact</a>
+      </div>
+    </div>
+    <p style="text-align:center;margin-top:16px;font-size:12px;">
+      <a href="tel:+2290162434707">+229 01 62 43 47 07</a>
+      ·
+      <a href="mailto:koyaapay@gmail.com">koyaapay@gmail.com</a>
+    </p>
+  </div>
+</footer>
+
+<div class="modal-overlay" id="contactModal" onclick="if(event.target===this)closeModal()">
+  <div class="modal-box">
+    <button type="button" class="modal-close" onclick="closeModal()" aria-label="Fermer">✕</button>
+    <h3>Parler à l’équipe</h3>
+    <p class="modal-sub">Laissez vos coordonnées. On vous recontacte sous 24 h pour une démo ou pour créer votre compte.</p>
+    <form id="demoForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
+      <div class="form-row" style="display:grid;gap:10px;">
+        <input name="name" required placeholder="Votre nom" style="width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;">
+        <input name="email" type="email" required placeholder="E-mail" style="width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;">
+        <input name="phone" placeholder="Téléphone" style="width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;">
+        <textarea name="message" rows="3" placeholder="Message (optionnel)" style="width:100%;padding:12px;border:1px solid var(--line);border-radius:10px;"></textarea>
+        <button type="submit" class="btn btn-primary" style="width:100%;">Envoyer</button>
+      </div>
+    </form>
+    <p style="margin-top:14px;font-size:12.5px;color:var(--ink-soft);line-height:1.5;">
+      <i class="fa-solid fa-phone"></i> <a href="tel:+2290162434707">+229 01 62 43 47 07</a><br>
+      <i class="fa-brands fa-whatsapp"></i> <a href="https://wa.me/2290162434707" target="_blank" rel="noopener">WhatsApp</a><br>
+      <i class="fa-solid fa-envelope"></i> <a href="mailto:koyaapay@gmail.com">koyaapay@gmail.com</a>
+    </p>
+  </div>
+</div>
+
+<script>
+function closeMobile(){var n=document.getElementById('mobileNav');var b=document.getElementById('burgerBtn');if(n)n.classList.remove('open');}
+document.getElementById('burgerBtn')&&document.getElementById('burgerBtn').addEventListener('click',function(){
+  var n=document.getElementById('mobileNav');
+  if(n)n.classList.toggle('open');
+});
+function openModal(e){if(e)e.preventDefault();var m=document.getElementById('contactModal');if(m)m.classList.add('open');}
+function closeModal(){var m=document.getElementById('contactModal');if(m)m.classList.remove('open');}
+(function(){
+  var blocks=document.querySelectorAll('.vision .v-block');
+  if(blocks.length){
+    var io=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ if(en.isIntersecting) en.target.classList.add('on'); });
+    },{threshold:0.15});
+    blocks.forEach(function(b){io.observe(b);});
+  }
+  var reveals=document.querySelectorAll('.reveal');
+  if(reveals.length){
+    var io2=new IntersectionObserver(function(entries){
+      entries.forEach(function(en){ if(en.isIntersecting) en.target.classList.add('on'); });
+    },{threshold:0.12});
+    reveals.forEach(function(b){io2.observe(b);});
+  }
+})();
+</script>
+</body>
+</html>
