@@ -156,6 +156,22 @@
   .contact-info a:hover{color:var(--green);}
   .reveal{opacity:0;transform:translateY(18px);transition:opacity .6s ease,transform .6s ease;}
   .reveal.in{opacity:1;transform:translateY(0);}
+  
+  /* Vision / projet */
+  .vision{background:var(--paper);padding:72px 0;overflow:hidden;}
+  .vision-inner{max-width:720px;margin:0 auto;text-align:center;}
+  .vision-globe{width:120px;height:120px;margin:0 auto 28px;border-radius:50%;background:radial-gradient(circle at 35% 30%,#5eead4,#0f766e 45%,#0f1b2d 100%);box-shadow:0 12px 40px rgba(15,27,45,0.18),inset -8px -8px 20px rgba(0,0,0,0.25);position:relative;}
+  .vision-globe::after{content:"";position:absolute;inset:18%;border:1.5px solid rgba(255,255,255,0.25);border-radius:50%;border-left-color:transparent;border-bottom-color:transparent;}
+  .vision-globe::before{content:"";position:absolute;left:50%;top:8%;bottom:8%;width:1.5px;background:rgba(255,255,255,0.2);transform:translateX(-50%);}
+  .vision p.v-block{font-size:15.5px;line-height:1.75;color:var(--ink);text-align:justify;text-align-last:center;margin:0 auto 18px;max-width:640px;opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
+  .vision p.v-block.on{opacity:1;transform:none;}
+  .vision-banner{margin:36px auto;padding:36px 28px;border-radius:20px;background:linear-gradient(145deg,var(--navy),#1a3a2e);color:#fff;max-width:640px;}
+  .vision-banner h3{font-family:Sora,sans-serif;font-size:22px;line-height:1.35;font-weight:700;text-align:center;margin:0;}
+  .vision-banner h3 span{color:var(--green);}
+  #comment .wrap{text-align:center;}
+  #comment .section-title,#comment .section-sub,#comment .eyebrow{margin-left:auto;margin-right:auto;text-align:center;}
+  #comment .section-sub{max-width:520px;}
+
   @media (max-width:900px){.hero-grid{grid-template-columns:1fr;}.hero-grid>div:first-child{text-align:center;}.hero h1{font-size:32px;}.hero p.lead{margin-left:auto;margin-right:auto;}.hero-actions,.hero-trust{justify-content:center;}.employee-section .wrap{grid-template-columns:1fr;}.steps{grid-template-columns:1fr 1fr;}}
   @media (max-width:820px){.nav-links{display:none;}.burger{display:block;}.nav-actions .btn-outline{display:none;}}
   @media (max-width:640px){section{padding:52px 0;}.wrap{padding:0 20px;}.section-title{font-size:23px;}.steps,.feat-grid{gap:14px;}.step-card,.feat-card{padding:18px 16px;}.nav-row{padding:10px 0;}.nav-brand span{font-size:15px;}.nav-actions .btn{padding:8px 14px;font-size:12px;}.form-row{grid-template-columns:1fr;}}
@@ -230,12 +246,27 @@
 <div class="strip">
   <div class="wrap strip-row">
     <span><i class="fa-solid fa-mobile-screen-button"></i> MTN Mobile Money</span>
-    <span><i class="fa-solid fa-mobile-screen-button"></i> Moov Money</span>
-    <span><i class="fa-solid fa-mobile-screen-button"></i> Celtiis Cash</span>
-    <span><i class="fa-brands fa-whatsapp"></i> WhatsApp Business</span>
-    <span><i class="fa-solid fa-building-columns"></i> Virement bancaire</span>
+    <span><i class="fa-solid fa-envelope"></i> Bulletins par e-mail</span>
+    <span><i class="fa-solid fa-shield-halved"></i> Paiement sécurisé</span>
+    <span><i class="fa-solid fa-building"></i> Pensé pour l’Afrique</span>
   </div>
 </div>
+
+
+<section class="vision" id="projet">
+  <div class="wrap">
+    <div class="vision-inner">
+      <div class="vision-globe" aria-hidden="true"></div>
+      <p class="v-block" data-v="1">Aujourd’hui, les entreprises disposent déjà de solutions numériques capables de gérer la paie, les ressources humaines et les paiements des collaborateurs. Certaines sont très complètes, mais souvent pensées pour des organisations internationales ou des environnements qui nécessitent des systèmes complexes.</p>
+      <div class="vision-banner reveal">
+        <h3>KoyaPay part d’une autre réalité.<br><span>Et si la gestion de la paie pouvait être beaucoup plus simple, accessible et adaptée aux entreprises africaines ?</span></h3>
+      </div>
+      <p class="v-block" data-v="2">KoyaPay est une plateforme conçue pour simplifier tout le processus, de la préparation de la paie jusqu’au versement du salaire aux employés. Un seul espace pour toute la paie.</p>
+      <p class="v-block" data-v="3">Avec KoyaPay, l’entreprise peut centraliser ses employés, leurs informations salariales, leurs primes, leurs retenues et leurs historiques.</p>
+      <p class="v-block" data-v="4">Fini les fichiers dispersés, les calculs manuels et les multiples manipulations avant chaque période de paie. L’entreprise prépare sa paie, vérifie les informations, valide et lance le processus de paiement depuis une même plateforme.</p>
+    </div>
+  </div>
+</section>
 
 <section id="comment">
   <div class="wrap">
@@ -244,9 +275,9 @@
     <p class="section-sub">Conçu pour que la paie ne prenne plus toute une journée à l'employeur ou au comptable.</p>
     <div class="steps">
       <div class="step-card reveal"><div class="step-num">1</div><i class="fa-solid fa-users big"></i><h3>Préparez la paie</h3><p>Ajoutez vos employés (manuellement ou via Excel) et ajustez primes, transport ou retenues du mois.</p></div>
-      <div class="step-card reveal"><div class="step-num">2</div><i class="fa-solid fa-calendar-day big"></i><h3>Choisissez la date</h3><p>Fixez la date de paiement. Vous pouvez encore tout modifier jusqu'à la veille.</p></div>
+      <div class="step-card reveal"><div class="step-num">2</div><i class="fa-solid fa-calendar-day big"></i><h3>Choisissez la date</h3><p>Indiquez le mois de salaire concerné. Le paiement peut être lancé le jour même via Mobile Money.</p></div>
       <div class="step-card reveal"><div class="step-num">3</div><i class="fa-solid fa-wallet big"></i><h3>Déposez une seule fois</h3><p>Un seul dépôt couvre l'ensemble des salaires et des frais, via Mobile Money ou virement.</p></div>
-      <div class="step-card reveal"><div class="step-num">4</div><i class="fa-solid fa-paper-plane big"></i><h3>Tout le monde est payé</h3><p>Chaque employé reçoit son salaire et son bulletin sur WhatsApp, le jour J, simultanément.</p></div>
+      <div class="step-card reveal"><div class="step-num">4</div><i class="fa-solid fa-paper-plane big"></i><h3>Tout le monde est payé</h3><p>Chaque employé reçoit son salaire le jour J. Le bulletin de paie est envoyé par e-mail.</p></div>
     </div>
   </div>
 </section>
@@ -292,103 +323,26 @@
 </section>
 
 <section id="tarifs">
-  <div class="wrap">
-    <p class="eyebrow">Tarifs</p>
-    <h2 class="section-title">Un seul frais, tout compris</h2>
-    <p class="section-sub">Frais KoyaPay et frais opérateurs inclus dans un pourcentage unique, dégressif selon votre masse salariale.</p>
-    <div class="pricing-table reveal">
-      <table>
-        <thead><tr><th>Masse salariale nette</th><th style="text-align:right;">Frais KoyaPay</th></tr></thead>
-        <tbody>
-          <tr><td>0 – 500 000 FCFA</td><td>0,7 %</td></tr>
-          <tr><td>500 001 – 1 000 000 FCFA</td><td>0,5 % + 50 FCFA / employé</td></tr>
-          <tr><td>1 000 001 FCFA et plus</td><td>0,4 % + 50 FCFA / employé</td></tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="pricing-examples">
-      <div class="pex reveal"><div class="a">200 000 FCFA</div><div class="b">5 employés</div><div class="f">1 400 FCFA de frais</div></div>
-      <div class="pex reveal"><div class="a">800 000 FCFA</div><div class="b">12 employés</div><div class="f">4 600 FCFA de frais</div></div>
-      <div class="pex reveal"><div class="a">3 500 000 FCFA</div><div class="b">25 employés</div><div class="f">15 250 FCFA de frais</div></div>
-    </div>
-  </div>
-</section>
-
-<section class="cta-band" id="cta">
-  <div class="wrap">
-    <h2>Prêt à simplifier votre paie ?</h2>
-    <p>Créez votre compte, ajoutez vos employés, et faites votre premier dépôt en quelques minutes.</p>
-    <div class="cta-actions">
-      <a href="https://koyapayapp.vercel.app/register" class="btn btn-primary">Créer mon compte</a>
-      <a href="#" class="btn btn-outline" onclick="openModal(event)">Parler à l'équipe</a>
-    </div>
-  </div>
-</section>
-
-<footer>
-  <div class="wrap">
-    <div class="foot-brand"><img src="data:image/png;base64,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" alt="" class="logo-img sm"> KoyaPay</div>
-    <p style="max-width:420px;margin:10px auto 0;text-align:center;">Paie. Simple. Sécurisée. Un seul dépôt et tous vos employés sont payés le même jour.</p>
-    <div class="foot-row">
-      <span>© 2026 KoyaPay — Bénin</span>
-      <div class="foot-links">
-        <a href="#comment">Comment ça marche</a>
-        <a href="#fonctionnalites">Fonctionnalités</a>
-        <a href="#tarifs">Tarifs</a>
-        <a href="#" onclick="openModal(event)">Contact</a>
+  <div class="wrap" style="text-align:center;">
+    <p class="eyebrow" style="margin-left:auto;margin-right:auto;">Tarifs</p>
+    <h2 class="section-title" style="margin-left:auto;margin-right:auto;">Des frais clairs, selon la masse salariale</h2>
+    <p class="section-sub" style="margin-left:auto;margin-right:auto;">Les frais KoyaPay sont calculés sur le total net de la paie. Des frais de transaction Mobile Money s’appliquent en plus selon le réseau (MTN).</p>
+    <div style="max-width:560px;margin:28px auto 0;text-align:left;background:#fff;border:1px solid var(--line);border-radius:16px;overflow:hidden;">
+      <div style="display:grid;grid-template-columns:1.4fr 1fr;gap:0;font-size:13px;">
+        <div style="padding:12px 16px;font-weight:700;background:var(--paper-2);border-bottom:1px solid var(--line);">Masse salariale</div>
+        <div style="padding:12px 16px;font-weight:700;background:var(--paper-2);border-bottom:1px solid var(--line);">Frais KoyaPay</div>
+        <div style="padding:12px 16px;border-bottom:1px solid var(--line);">50 000 – 500 000 F</div>
+        <div style="padding:12px 16px;border-bottom:1px solid var(--line);font-weight:600;">1,00 % + 100 F / employé</div>
+        <div style="padding:12px 16px;border-bottom:1px solid var(--line);">500 001 – 5 000 000 F</div>
+        <div style="padding:12px 16px;border-bottom:1px solid var(--line);font-weight:600;">0,80 % + 200 F / employé</div>
+        <div style="padding:12px 16px;border-bottom:1px solid var(--line);">5 000 001 – 10 000 000 F</div>
+        <div style="padding:12px 16px;border-bottom:1px solid var(--line);font-weight:600;">0,70 % + 300 F / employé</div>
+        <div style="padding:12px 16px;border-bottom:1px solid var(--line);">10 000 001 – 25 000 000 F</div>
+        <div style="padding:12px 16px;border-bottom:1px solid var(--line);font-weight:600;">0,60 % + 400 F / employé</div>
+        <div style="padding:12px 16px;">25 000 001 F et +</div>
+        <div style="padding:12px 16px;font-weight:600;">0,50 % + 550 F / employé</div>
       </div>
     </div>
+    <p style="font-size:12.5px;color:var(--ink-soft);max-width:520px;margin:18px auto 0;line-height:1.55;">KoyaPay ne prend pas en charge les frais opérateur Mobile Money. Ils restent à la charge de l’entreprise, selon le réseau.</p>
   </div>
-</footer>
-
-<div class="modal-overlay" id="contactModal" onclick="closeModal(event)">
-  <div class="modal-box" onclick="event.stopPropagation()">
-    <button class="modal-close" onclick="closeModal(event)" aria-label="Fermer"><i class="fa-solid fa-xmark"></i></button>
-    <div id="formView">
-      <h3>Parler à l'équipe KoyaPay</h3>
-      <p class="modal-sub">Laissez vos coordonnées. On vous recontacte sous 24 h pour une démo ou pour créer votre compte.</p>
-      <form id="demoForm" action="https://formspree.io/f/YOUR_FORM_ID" method="POST">
-        <input type="hidden" name="_subject" value="Nouvelle demande KoyaPay">
-        <div class="form-row">
-          <div class="form-group"><label for="fName">Prénom *</label><input type="text" id="fName" name="prenom" required placeholder="Jean"></div>
-          <div class="form-group"><label for="fLast">Nom *</label><input type="text" id="fLast" name="nom" required placeholder="Koffi"></div>
-        </div>
-        <div class="form-group"><label for="fCompany">Entreprise *</label><input type="text" id="fCompany" name="entreprise" required placeholder="Nom de votre entreprise"></div>
-        <div class="form-group"><label for="fPhone">Téléphone / WhatsApp *</label><input type="tel" id="fPhone" name="telephone" required placeholder="+229 01 XX XX XX XX"></div>
-        <div class="form-group"><label for="fEmail">Email</label><input type="email" id="fEmail" name="email" placeholder="vous@entreprise.bj"></div>
-        <div class="form-group"><label for="fEmployees">Nombre d'employés (approx.)</label>
-          <select id="fEmployees" name="employes"><option value="1-5">1 – 5</option><option value="6-15">6 – 15</option><option value="16-50">16 – 50</option><option value="50+">Plus de 50</option></select>
-        </div>
-        <button type="submit" class="btn btn-primary" style="width:100%;margin-top:6px;" id="submitBtn">Envoyer ma demande</button>
-      </form>
-      <div class="contact-info">
-        <p><i class="fa-solid fa-phone"></i> <a href="tel:+2290162434707">+229 01 62 43 47 07</a></p>
-        <p><i class="fa-brands fa-whatsapp"></i> <a href="https://wa.me/2290162434707" target="_blank" rel="noopener">+229 01 62 43 47 07</a></p>
-        <p><i class="fa-solid fa-envelope"></i> <a href="mailto:koyaapay@gmail.com">koyaapay@gmail.com</a></p>
-      </div>
-    </div>
-    <div class="form-success" id="successView">
-      <i class="fa-solid fa-circle-check"></i>
-      <h4>Demande bien reçue !</h4>
-      <p>Merci. Notre équipe vous contacte très rapidement sur WhatsApp ou par téléphone.</p>
-      <button class="btn btn-primary" style="margin-top:18px;width:100%;" onclick="closeModal(event)">Fermer</button>
-    </div>
-  </div>
-</div>
-
-<script>
-  const burger=document.getElementById('burgerBtn'),mobileNav=document.getElementById('mobileNav');
-  burger.addEventListener('click',()=>{mobileNav.classList.toggle('open');burger.querySelector('i').classList.toggle('fa-bars');burger.querySelector('i').classList.toggle('fa-xmark');});
-  function closeMobile(){mobileNav.classList.remove('open');burger.querySelector('i').classList.add('fa-bars');burger.querySelector('i').classList.remove('fa-xmark');}
-  function openModal(e){if(e)e.preventDefault();document.getElementById('contactModal').classList.add('open');document.getElementById('formView').style.display='block';document.getElementById('successView').classList.remove('show');document.body.style.overflow='hidden';}
-  function closeModal(e){if(e)e.preventDefault();document.getElementById('contactModal').classList.remove('open');document.body.style.overflow='';}
-  document.getElementById('demoForm').addEventListener('submit',function(e){
-    const action=this.getAttribute('action')||'';
-    if(action.includes('YOUR_FORM_ID')){e.preventDefault();const btn=document.getElementById('submitBtn');btn.disabled=true;btn.textContent='Envoi en cours…';setTimeout(()=>{document.getElementById('formView').style.display='none';document.getElementById('successView').classList.add('show');btn.disabled=false;btn.textContent='Envoyer ma demande';this.reset();},700);}
-  });
-  const io=new IntersectionObserver((entries)=>{entries.forEach(entry=>{if(entry.isIntersecting){entry.target.classList.add('in');io.unobserve(entry.target);}});},{threshold:0.12});
-  document.querySelectorAll('.reveal').forEach(el=>io.observe(el));
-  document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
-</script>
-</body>
-</html>
+</section>
