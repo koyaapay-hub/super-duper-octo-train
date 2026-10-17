@@ -184,7 +184,7 @@ header {
 
 .nav-actions {
   display:flex;
-  gap:10px;
+  gap:20px;
   align-items:center;
 }
 
