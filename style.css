@@ -139,7 +139,7 @@ header {
   position:sticky;
   top:0;
   z-index:30;
-  background:rgba(15,27,45,0.7);
+  background:rgba(15,27,45,0.94);
   backdrop-filter:blur(10px);
   -webkit-backdrop-filter:blur(10px);
 }
@@ -149,7 +149,7 @@ header {
   align-items:center;
   justify-content:space-between;
   padding:14px 0;
-  gap:25px;
+  gap:16px;
 }
 
 .nav-brand {
@@ -160,8 +160,8 @@ header {
 
 .nav-brand span {
   font-family:'Sora',sans-serif;
-  font-weight:500;
-  font-size:17px;
+  font-weight:700;
+  font-size:15px;
   color:#fff;
 }
 
@@ -173,9 +173,9 @@ header {
 }
 
 .nav-links a {
-  color:rgba(251,249,245,0.75);
-  font-size:7px;
-  font-weight:400;
+  color: rgba(251,249,245,0.75);
+  font-size: 11px;
+  font-weight: 600;
 }
 
 .nav-links a:hover {
@@ -1289,4 +1289,80 @@ footer {
   background: #f3f4f6 !important;
   color: #0f1b2d !important;
   border-radius: 12px !important;
+}
+
+
+/* Liens d'action header : icônes + petits libellés */
+.nav-icon-link {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  padding: 4px 8px;
+  color: rgba(251,249,245,0.7);
+  text-decoration: none;
+  font-weight: 500;
+  transition: color 0.15s;
+  min-width: 52px;
+}
+.nav-icon-link i {
+  font-size: 15px;
+  font-weight: 400;
+  opacity: 0.9;
+}
+.nav-icon-link .nav-icon-label {
+  font-size: 9px;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: rgba(251,249,245,0.55);
+  white-space: nowrap;
+  line-height: 1.2;
+}
+.nav-icon-link:hover {
+  color: rgba(251,249,245,0.95);
+}
+.nav-icon-link:hover .nav-icon-label {
+  color: rgba(251,249,245,0.8);
+}
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+/* Mobile : liens icon */
+.mobile-icon-link {
+  display: flex !important;
+  align-items: center;
+  gap: 10px;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: rgba(251,249,245,0.8) !important;
+}
+.mobile-icon-link i {
+  width: 18px;
+  text-align: center;
+  opacity: 0.85;
+}
+
+
+@media (max-width: 900px) {
+  .nav-links a {
+    font-size: 10px;
+  }
+  .nav-icon-label {
+    font-size: 8px;
+  }
+  .nav-icon-link i {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 700px) {
+  .mobile-nav a {
+    font-size: 13px;
+    font-weight: 500;
+  }
 }
