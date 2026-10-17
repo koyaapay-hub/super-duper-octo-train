@@ -45,7 +45,7 @@ h1,h2,h3 {
 
 a {
   text-decoration:none;
-  color:inherit;
+  color:rgba(251,249,245,0.85);
 }
 
 .btn {
