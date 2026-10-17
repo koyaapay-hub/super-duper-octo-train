@@ -45,7 +45,7 @@ h1,h2,h3 {
 
 a {
   text-decoration:none;
-  color:rgba(251,249,245,0.85);
+  color:inherit;
 }
 
 .btn {
@@ -184,7 +184,7 @@ header {
 
 .nav-actions {
   display:flex;
-  gap:20px;
+  gap:10px;
   align-items:center;
 }
 
@@ -1317,11 +1317,11 @@ footer {
 }
 
 
-/* ===== Header icons: même style PC + mobile (petits) ===== */
+/* ===== Header icons (PC + mobile) ===== */
 .nav-actions {
   display: flex;
   align-items: center;
-  gap: 2px;
+  gap: 20px;              /* 20px entre les deux boutons */
   flex-shrink: 0;
 }
 
@@ -1331,18 +1331,24 @@ footer {
   align-items: center;
   justify-content: center;
   gap: 2px;
-  padding: 2px 8px;
+  padding: 8px 10px;
   margin: 0;
-  color: rgba(251, 249, 245, 0.8);
+  color: #fff;
   text-decoration: none;
   font-weight: 500;
   line-height: 1.1;
-  background: transparent;
+  background: var(--green);   /* fond vert branding */
   border: none;
+  border-radius: 10px;
   box-shadow: none;
   min-width: 0;
-  max-width: 72px;
   flex: 0 0 auto;
+  transition: background 0.15s, opacity 0.15s;
+}
+
+.nav-icon-link:hover {
+  background: var(--green-deep);
+  color: #fff;
 }
 
 .nav-icon-link svg,
@@ -1353,29 +1359,13 @@ footer {
   max-height: 16px !important;
   display: block;
   flex-shrink: 0;
-  opacity: 0.85;
-  stroke: currentColor;
+  stroke: #fff;
+  opacity: 1;
 }
 
+/* PC : cacher les textes sous les icônes */
 .nav-icon-link .nav-icon-label {
-  display: block;
-  font-size: 9px;
-  font-weight: 500;
-  letter-spacing: 0;
-  color: rgba(251, 249, 245, 0.55);
-  white-space: nowrap;
-  line-height: 1.1;
-  max-width: 70px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-}
-
-.nav-icon-link:hover {
-  color: #fff;
-}
-
-.nav-icon-link:hover .nav-icon-label {
-  color: rgba(251, 249, 245, 0.9);
+  display: none;
 }
 
 .nav-links a {
@@ -1392,24 +1382,31 @@ footer {
   color: rgba(251, 249, 245, 0.85) !important;
 }
 
+/* Mobile : réafficher les libellés sous les icônes */
 @media (max-width: 820px) {
   .nav-actions {
     display: flex !important;
+    gap: 12px;
     margin-left: auto;
     margin-right: 2px;
   }
   .nav-icon-link {
-    padding: 2px 6px;
-    max-width: 64px;
+    padding: 6px 8px;
+    background: transparent; /* sur mobile on peut rester discret ; sinon garde vert */
+    border-radius: 8px;
+  }
+  .nav-icon-link .nav-icon-label {
+    display: block;
+    font-size: 8px;
+    font-weight: 500;
+    color: rgba(251, 249, 245, 0.55);
+    white-space: nowrap;
+    line-height: 1.1;
   }
   .nav-icon-link svg,
   .nav-icon-link .nav-svg {
     width: 15px !important;
     height: 15px !important;
-    max-width: 15px !important;
-    max-height: 15px !important;
-  }
-  .nav-icon-link .nav-icon-label {
-    font-size: 8px;
+    stroke: rgba(251, 249, 245, 0.85);
   }
 }
