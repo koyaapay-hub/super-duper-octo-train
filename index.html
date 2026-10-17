@@ -26,27 +26,36 @@
         <a href="https://koyapayapp.vercel.app/cgu">CGU</a>
         <a href="https://koyapayapp.vercel.app/confidentialite">Confidentialité</a>
     </nav>
-    <div class="nav-actions">
+        <div class="nav-actions">
       <a href="https://koyapayapp.vercel.app/login" class="nav-icon-link" title="Se connecter">
-        <i class="fa-solid fa-right-to-bracket"></i>
+        <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"/>
+          <polyline points="10 17 15 12 10 7"/>
+          <line x1="15" y1="12" x2="3" y2="12"/>
+        </svg>
         <span class="nav-icon-label">Se connecter</span>
       </a>
       <a href="https://koyapayapp.vercel.app/register" class="nav-icon-link" title="Créer un compte">
-        <i class="fa-solid fa-user-plus"></i>
+        <svg class="nav-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/>
+          <circle cx="9" cy="7" r="4"/>
+          <line x1="19" y1="8" x2="19" y2="14"/>
+          <line x1="22" y1="11" x2="16" y2="11"/>
+        </svg>
         <span class="nav-icon-label">Créer un compte</span>
       </a>
     </div>
     <button class="burger" id="burgerBtn" aria-label="Menu"><i class="fa-solid fa-bars"></i></button>
   </div>
-  <div class="mobile-nav" id="mobileNav">
+    <div class="mobile-nav" id="mobileNav">
     <a href="#comment" onclick="closeMobile()">Comment ça marche</a>
     <a href="#fonctionnalites" onclick="closeMobile()">Fonctionnalités</a>
     <a href="#employes" onclick="closeMobile()">Côté employé</a>
     <a href="#tarifs" onclick="closeMobile()">Tarifs</a>
     <a href="https://koyapayapp.vercel.app/cgu" onclick="closeMobile()">CGU</a>
     <a href="https://koyapayapp.vercel.app/confidentialite" onclick="closeMobile()">Confidentialité</a>
-    <a href="https://koyapayapp.vercel.app/login" onclick="closeMobile()" class="mobile-icon-link"><i class="fa-solid fa-right-to-bracket"></i> Se connecter</a>
-    <a href="https://koyapayapp.vercel.app/register" onclick="closeMobile()" class="mobile-icon-link"><i class="fa-solid fa-user-plus"></i> Créer un compte</a>
+    <a href="https://koyapayapp.vercel.app/login" onclick="closeMobile()" class="mobile-icon-link">→ Se connecter</a>
+    <a href="https://koyapayapp.vercel.app/register" onclick="closeMobile()" class="mobile-icon-link">+ Créer un compte</a>
   </div>
 </header>
 
