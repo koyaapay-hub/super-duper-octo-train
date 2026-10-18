@@ -46,6 +46,7 @@
   .hero-trust{display:flex;gap:22px;font-size:12px;color:rgba(251,249,245,0.55);flex-wrap:wrap;}
   .hero-trust span{display:flex;align-items:center;gap:6px;}
   .hero-trust i{color:var(--green);}
+  .hero-photo{display:block;width:100%;max-width:420px;margin:24px auto 0;border-radius:16px;object-fit:cover;}
   .phone-mock{background:var(--paper);border-radius:26px;padding:0;box-shadow:0 40px 90px rgba(0,0,0,0.4);overflow:hidden;margin:0 auto;max-width:300px;border:6px solid #0a1420;}
   .phone-mock .pm-top{background:linear-gradient(160deg,var(--navy),var(--navy-2));color:#fff;padding:18px 18px 44px;position:relative;}
   .phone-mock .pm-top .pm-logo{display:flex;align-items:center;gap:8px;margin-bottom:14px;}
