@@ -40,7 +40,7 @@
   .hero-grid{display:grid;grid-template-columns:1.05fr 0.95fr;gap:40px;align-items:center;}
   .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:rgba(47,175,100,0.16);color:var(--green);border-radius:20px;padding:6px 14px;font-size:12px;font-weight:700;margin-bottom:18px;}
   .hero h1{font-size:40px;line-height:1.18;margin-bottom:16px;}
-  .hero h2{font-size:25px;line-height:1;margin-bottom:16px;}
+  .hero h2{font-size:20px;line-height:1;margin-bottom:16px;}
   .hero h2 span{color:var(--green);}
   .hero p.lead{font-size:15.5px;color:rgba(251,249,245,0.75);line-height:1.7;max-width:480px;margin-bottom:26px;}
   .hero-actions{display:flex;gap:12px;flex-wrap:wrap;margin-bottom:30px;}
