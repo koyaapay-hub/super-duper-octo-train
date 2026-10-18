@@ -167,26 +167,18 @@
   @media (max-width:560px){.steps{grid-template-columns:1fr;}.feat-grid{grid-template-columns:1fr;}}
   @media (max-width:480px){.wrap{padding:0 16px;}.hero{padding:56px 0 48px;}.hero h1{font-size:28px;}}
 
-
-  /* Animations au scroll (contenu visible même si JS lent) */
-  .reveal {
+  /* Animation : arrive de la gauche */
+  .anime-scroll {
     opacity: 0;
-    transform: translateY(22px);
-    transition: opacity 0.65s ease, transform 0.65s ease;
-  }
-  .reveal.on {
-    opacity: 1;
-    transform: none;
-  }
-  .v-block {
-    opacity: 0;
-    transform: translateY(22px);
+    transform: translateX(-40px);
     transition: opacity 0.7s ease, transform 0.7s ease;
   }
-  .v-block.on {
+
+  .anime-scroll.visible {
     opacity: 1;
-    transform: none;
+    transform: translateX(0);
   }
+ 
   .steps {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
