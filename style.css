@@ -178,17 +178,6 @@
     opacity: 1;
     transform: translateX(0);
   }
-
-/* Sécurité : si le JS ne marche pas, tout redevient visible après 2s */
-@keyframes force-show {
-  to {
-    opacity: 1;
-    transform: none;
-    }
-  }
-.anime-scroll {
-    animation: force-show 0.01s ease 2s forwards;
-  }
  
   .steps {
     display: grid;
